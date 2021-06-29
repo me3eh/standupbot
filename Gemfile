@@ -9,7 +9,7 @@ gem 'rack-server-pages'
 gem 'rack-test'
 gem 'slack-ruby-bot-server'
 gem 'slack-ruby-bot-server-events'
-gem 'puma'
+gem 'unicorn'
 
 group :development, :test do
   gem 'standalone_migrations'
