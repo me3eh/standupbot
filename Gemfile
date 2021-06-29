@@ -15,15 +15,15 @@ group :development, :test do
   gem 'standalone_migrations'
 end
 
-# group :test do
-#   gem 'capybara'
-#   gem 'database_cleaner'
-#   gem 'fabrication'
-#   gem 'faker'
-#   gem 'rake'
-#   gem 'rspec'
-#   gem 'spec'
-#   gem 'selenium-webdriver'
-#   gem 'vcr'
-#   gem 'webmock'
-# end
+group :test do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'fabrication'
+  gem 'faker'
+  gem 'rake'
+  gem 'rspec'
+  gem 'spec'
+  gem 'selenium-webdriver'
+  gem 'vcr'
+  gem 'webmock'
+end
