@@ -1,26 +1,25 @@
-
 source 'https://rubygems.org'
 
-ruby '2.6.6'
-
-gem 'irb'
-gem 'mongoid'
-gem 'mongoid-scroll'
+gem 'activerecord', require: 'active_record'
 gem 'newrelic-slack-ruby-bot'
-gem 'puma'
-gem 'slack-ruby-bot-server', '>= 1.1.0'
+gem 'otr-activerecord'
+gem 'pg'
+gem 'rack-server-pages'
+gem 'rack-test'
+gem 'slack-ruby-bot-server'
 gem 'slack-ruby-bot-server-events'
-gem 'slack-ruby-bot-server-events-app-mentions'
+gem 'unicorn'
+
+group :development, :test do
+  gem 'standalone_migrations'
+end
 
 group :test do
-  gem 'capybara'
   gem 'database_cleaner'
   gem 'fabrication'
   gem 'faker'
-  gem 'rack-test'
   gem 'rake'
   gem 'rspec'
-  gem 'selenium-webdriver'
   gem 'vcr'
   gem 'webmock'
 end
