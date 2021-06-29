@@ -7,8 +7,7 @@ SlackRubyBotServer::Events.configure do |config|
     action.logger.info "Counting letters in \"#{message[:text]}\"."
 
     Faraday.post(response_url, {
-      text: "The text \"#{message[:text]}\" has #{message[:text].size} letter(s).",
-      response_type: 'ephemeral'
+      text: "The text \"#{message[:text]}\" has #{message[:text].size} letter(s)."
     }.to_json, 'Content-Type' => 'application/json')
 
     { ok: true }
