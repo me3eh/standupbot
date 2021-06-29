@@ -120,6 +120,8 @@ GEM
       grape
       kaminari-core (~> 1.0)
     kgio (2.11.4)
+    kramdown (2.3.1)
+      rexml
     loofah (2.10.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -251,6 +253,7 @@ DEPENDENCIES
   database_cleaner
   fabrication
   faker
+  kramdown
   newrelic-slack-ruby-bot
   otr-activerecord
   pg
@@ -265,6 +268,3 @@ DEPENDENCIES
   unicorn
   vcr
   webmock
-
-BUNDLED WITH
-   2.2.18
