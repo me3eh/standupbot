@@ -22,6 +22,7 @@ group :test do
   gem 'faker'
   gem 'rake'
   gem 'rspec'
+  gem 'spec'
   gem 'selenium-webdriver'
   gem 'vcr'
   gem 'webmock'
