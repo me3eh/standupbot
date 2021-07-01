@@ -2,6 +2,7 @@
 
 ENV['RACK_ENV'] ||= 'development'
 
+require 'bundler'
 Bundler.require :default
 
 Dir[File.expand_path('config/initializers', __dir__) + '/**/*.rb'].sort.each do |file|
@@ -23,10 +24,3 @@ ActiveRecord::Base.establish_connection(
     ).result, [], [], true
   )[ENV['RACK_ENV']]
 )
-
-NewRelic::Agent.manual_start
-
-SlackRubyBotServer::App.instance.prepare!
-SlackRubyBotServer::Service.start!
-
-# run SlackRubyBotServer::Api::Middleware.instance
