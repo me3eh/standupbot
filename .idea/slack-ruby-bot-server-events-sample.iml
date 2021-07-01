@@ -61,7 +61,6 @@
     <orderEntry type="library" scope="PROVIDED" name="i18n (v1.8.10, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="kaminari-core (v1.2.1, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="kaminari-grape (v1.0.1, rbenv: 2.6.6) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="kgio (v2.11.4, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="kramdown (v2.3.1, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="loofah (v2.10.0, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="method_source (v1.0.0, rbenv: 2.6.6) [gem]" level="application" />
@@ -79,6 +78,7 @@
     <orderEntry type="library" scope="PROVIDED" name="otr-activerecord (v2.0.1, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pg (v1.2.3, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="public_suffix (v4.0.6, rbenv: 2.6.6) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="puma (v5.3.2, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="racc (v1.5.2, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack (v2.2.3, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack-accept (v0.4.5, rbenv: 2.6.6) [gem]" level="application" />
@@ -89,7 +89,6 @@
     <orderEntry type="library" scope="PROVIDED" name="rails-dom-testing (v2.0.3, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rails-html-sanitizer (v1.3.0, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="railties (v6.0.4, rbenv: 2.6.6) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="raindrops (v0.19.2, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v13.0.3, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="regexp_parser (v2.1.1, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="representable (v3.0.4, rbenv: 2.6.6) [gem]" level="application" />
@@ -114,7 +113,6 @@
     <orderEntry type="library" scope="PROVIDED" name="timers (v4.3.3, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v1.2.9, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uber (v0.1.0, rbenv: 2.6.6) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="unicorn (v6.0.0, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="vcr (v6.0.0, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="webmock (v3.13.0, rbenv: 2.6.6) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="websocket-driver (v0.7.5, rbenv: 2.6.6) [gem]" level="application" />
@@ -124,12 +122,7 @@
   </component>
   <component name="RakeTasksCache">
     <option name="myRootTask">
-      <RakeTaskImpl id="rake">
-        <subtasks>
-          <RakeTaskImpl description="Run RSpec code examples" fullCommand="spec" id="spec" />
-          <RakeTaskImpl description="" fullCommand="default" id="default" />
-        </subtasks>
-      </RakeTaskImpl>
+      <RakeTaskImpl id="rake" />
     </option>
   </component>
 </module>
