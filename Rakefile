@@ -10,4 +10,5 @@ StandaloneMigrations::Tasks.load_tasks
 #   spec.pattern = FileList['spec/**/*_spec.rb']
 # end
 
+
 task default: [:spec]
