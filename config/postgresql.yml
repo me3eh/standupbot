@@ -23,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: przyklad_development
+  database: wstaniobot
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -57,7 +57,7 @@ development:
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: przyklad_test
+  database: wstaniobot_test
   username: jdoe
   password: password
   host: localhost
@@ -73,7 +73,7 @@ test:
 # production deployment.
 #
 # On Heroku and other platform providers, you may have a full connection URL
-# available as an environment variable. For example:
+# available as an environment variable. For example.rb:
 #
 #   DATABASE_URL="postgres://myuser:mypass@localhost/somedatabase"
 #

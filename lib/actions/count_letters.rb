@@ -8,7 +8,6 @@ SlackRubyBotServer::Events.configure do |config|
 
     Faraday.post(response_url, {
       text: "The text \"#{message[:text]}\" has #{message[:text].size} letter(s).",
-      response_type: 'ephemeral'
     }.to_json, 'Content-Type' => 'application/json')
 
     { ok: true }

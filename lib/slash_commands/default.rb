@@ -4,3 +4,7 @@ SlackRubyBotServer::Events.configure do |config|
     nil
   end
 end
+
+def contains_number(str, number)
+  !!(str =~ /#{number}/)
+end
