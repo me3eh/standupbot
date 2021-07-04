@@ -30,26 +30,30 @@ SlackRubyBotServer::Events.configure do |config|
       end
     end
     if what_number.empty?
-      word = []
-      (1..4).each do |i|
-        case i
-        when 4
-          word[i-1] = command_text[/[4][.].*$/,0].to_s
+      if check_order(command_text)
+        word = []
+        (1..4).each do |i|
+          case i
+          when 4
+            word[i-1] = command_text[/[4][.].*$/,0].to_s
+          else
+            word[i-1] = command_text[/["#{i}"][.][^(#{i+1}.)]*[#{i+1}][.]/,0].to_s.delete_suffix("#{i+1}.")
+          end
+        end
+        post_public(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name_normalized], word, "poranny")
+        standup = Standup_Check.find_by(user_id: command_user, date_of_stand: date_now, team: team.team_id)
+        if standup.nil?
+          Standup_Check.create(team: team.team_id, user_id: command_user, morning_stand: true, date_of_stand: date_now)
         else
-          word[i-1] = command_text[/["#{i}"][.][^(#{i+1}.)]*[#{i+1}][.]/,0].to_s.delete_suffix("#{i+1}.")
+          unless standup.morning_stand
+            standup.update(morning_stand: true)
+          end
         end
-      end
-      postPublic(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name_normalized], word, "poranny")
-      standup = Standup_Check.find_by(user_id: command_user, date_of_stand: date_now, team: team.team_id)
-      if standup.nil?
-        Standup_Check.create(team: team.team_id, user_id: command_user, morning_stand: true, date_of_stand: date_now)
       else
-        unless standup.morning_stand
-          standup.update(morning_stand: true)
-        end
+        not_correct_order(slack_client, command_channel, command_user, false)
       end
     else
-      information_about(what_number, slack_client, command_channel, command_user, MORNING_NOTIFICATION)
+      missing_points(what_number, slack_client, command_channel, command_user, MORNING_NOTIFICATION)
     end
     { text: "Jezeli chcesz edytować swój standup, oto co napisałeś:\n"+
             "#{command[:command]} #{command_text}"

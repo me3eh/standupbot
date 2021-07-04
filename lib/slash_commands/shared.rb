@@ -3,7 +3,7 @@ def contains_number(str, number)
   !!(str =~ /#{number}/)
 end
 
-def information_about(array, slack_client, channel_id, command_user, notification)
+def missing_points(array, slack_client, channel_id, command_user, notification)
   word = "\""
   array.each_with_index do |number, index|
     word += number.to_s
@@ -34,8 +34,43 @@ def information_about(array, slack_client, channel_id, command_user, notificatio
                                   )
 end
 
-def postPublic(slack_client, command_channel, name_of_user, word, morning_or_evening)
+def not_correct_order(slack_client, channel_id, command_user, morning_or_evening)
+  pic = morning_or_evening ?
+          "https://cdn.discordapp.com/attachments/766045866724163647/861348965043404810/comment_dtoZziPOPyhrsqZLkj29rK5vD0lXBPDa.jpg" :
+          "https://cdn.discordapp.com/attachments/766045866724163647/861360571706376202/ezgif-1-8349cc09efba.gif"
+  text = morning_or_evening ?
+           "Wierzę, że się starałeś. Trzymaj muchomora za to" :
+           "Essa, wywaliłeś program"
 
+  slack_client.chat_postEphemeral(channel: channel_id,
+                                  user: command_user,
+                                  "blocks": [
+                                    {
+                                      "type": "header",
+                                      "text": {
+                                        "type": "plain_text",
+                                        "text": "Zla kolejnosc.",
+                                        "emoji": true
+                                      }
+                                    },
+
+                                    {
+                                      "type": "section",
+                                      "text": {
+                                        "type": "mrkdwn",
+                                        "text": text
+                                      }
+                                    },
+                                    {
+                                      "type": "image",
+                                      "image_url": pic,
+                                      "alt_text": "Inspiracja"
+                                    }
+                                  ],
+                                  )
+end
+
+def post_public(slack_client, command_channel, name_of_user, word, morning_or_evening)
   slack_client.chat_postMessage(channel: command_channel,
                                 as_user: true,
                                 "blocks": [
@@ -58,4 +93,8 @@ def postPublic(slack_client, command_channel, name_of_user, word, morning_or_eve
                                   }
                                 ],
                                 )
+end
+
+def check_order(str)
+  !!(str =~ /^1[.].*2[.].*3[.].*4[.]/)
 end
