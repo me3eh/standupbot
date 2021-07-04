@@ -1,59 +1,54 @@
-require_relative 'default'
-
+EVENING_NOTIFICATION = "1. Co udało ci sie dzisiaj skończyć\n\n"+
+            "2. Które zadań nie zostały zakończone i na jakim etapie dzisiaj"+
+            " je pozostawiasz ? (pamiętałeś żeby wypchnąć je do repo?)\n\n"+
+            "3. Pojawiły się jakieś blockery?\n\n"+
+            "4. Czego nowego się dziś nauczyłeś / dowiedziałeś ? A jeśli niczego"+
+            " to czego w danym temacie chciałbyś się dowiedzieć ? Daj nam sobie pomóc\n"
 SlackRubyBotServer::Events.configure do |config|
-  config.on :command, '/morning_standup' do |command|
-    team = Team.where(team_id: command[:team_id]).first || raise("Cannot find team with ID #{command[:team_id]}.")
+  config.on :command, '/evening_standup' do |command|
+    team = Team.find_by(team_id: command[:team_id].to_s) || raise("Cannot find team with ID #{command[:team_id]}.")
     slack_client = Slack::Web::Client.new(token: team.token)
+    command_text = command[:text]
+    command_user = command[:user_id]
+    command_channel = command[:channel_id]
+
+    time_now = Time.now()
+    date_now = Date.new(time_now.year, time_now.month, time_now.day)
+
     what_number = []
     (1..4).each do |i|
-      word = contains_number(command[:text].to_s, "#{i}.")
+      word = contains_number(command_text.to_s, "#{i}.")
       unless word
         what_number.append(i)
       end
     end
     if what_number.empty?
-      {text: 'Wszystko jest pięknie. Dziękuję za standup'}
+      word = []
+      (1..4).each do |i|
+        case i
+        when 4
+          word[i-1] = command_text[/[4][.].*$/,0].to_s
+        else
+          word[i-1] = command_text[/["#{i}"][.][^(#{i+1}.)]*[#{i+1}][.]/,0].to_s.delete_suffix("#{i+1}.")
+        end
+      end
+      postPublic(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name_normalized], word, "wieczorny")
+
+      standup = Standup_Check.find_by(user_id: command_user, date_of_stand: date_now, team: team.team_id)
+      if standup.nil?
+        Standup_Check.create(team: team.team_id, user_id: command_user, evening_stand: true, date_of_stand: date_now)
+      else
+        unless standup.evening_stand
+          standup.update(evening_stand: true)
+        end
+      end
     else
-      information_about(what_number, slack_client, command[:channel_id])
+      information_about(what_number, slack_client, command_channel, command_user, EVENING_NOTIFICATION)
     end
+
     { text: "Jezeli chcesz edytować swój standup, oto co napisałeś:\n"+
-      "#{command[:command]} #{command[:text]}"
+      "#{command[:command]} #{command_text}"
     }
 
   end
-end
-
-
-def information_about(array, slack_client, channel_id)
-  word = "\""
-  array.each_with_index do |number, index|
-    word += number.to_s
-    if index != array.size - 1
-      word += ", "
-    end
-  end
-  word += "\""
-  slack_client.chat_postMessage(channel: channel_id,
-                                "blocks": [
-                                  {
-                                    "type": "header",
-                                    "text": {
-                                      "type": "plain_text",
-                                      "text": "Brak punktów: #{word}. Dla przypomnienia:",
-                                      "emoji": true
-                                    }
-                                  }
-                                ],
-                                "attachments": [
-                                  {
-                                    "text": "1.Jakie zadania na dziś planujesz oraz jak oceniasz czas ich wykonania?\n\n"+
-                                      "2. Jakie widzisz zagrożenia i blockery w powyższej liście?\n\n"+
-                                      "3. Czy w któryms z powyższych tematów chciałbyś otrzymać pomoc?\n\n"+
-                                      "4. Czy w którymś z planowanych zadań przyjąłbyś kompana do Pair programmingu"+
-                                      "/ konsultacji / podzielenia się wiedzą doświadczeniami?\n",
-                                    "color": "#ff0000",
-                                  }
-                                ],
-                                "text": "Użycie: 1. [coś] 2. [coś] 3. [coś] 4. [coś]"
-  )
 end
