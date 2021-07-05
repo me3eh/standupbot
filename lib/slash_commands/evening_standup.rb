@@ -1,9 +1,10 @@
-EVENING_NOTIFICATION = "1. Co udało ci sie dzisiaj skończyć\n\n"+
-            "2. Które zadań nie zostały zakończone i na jakim etapie dzisiaj"+
-            " je pozostawiasz ? (pamiętałeś żeby wypchnąć je do repo?)\n\n"+
-            "3. Pojawiły się jakieś blockery?\n\n"+
-            "4. Czego nowego się dziś nauczyłeś / dowiedziałeś ? A jeśli niczego"+
-            " to czego w danym temacie chciałbyś się dowiedzieć ? Daj nam sobie pomóc\n"
+EVENING_NOTIFICATION =  "1. Co udało ci sie dzisiaj skończyć\n\n"+
+                        "2. Które zadań nie zostały zakończone i na jakim etapie dzisiaj "+
+                        "je pozostawiasz ? (pamiętałeś żeby wypchnąć je do repo?)\n\n"+
+                        "3. Pojawiły się jakieś blockery?\n\n"+
+                        "4. Czego nowego się dziś nauczyłeś / dowiedziałeś ? A jeśli niczego "+
+                        "to czego w danym temacie chciałbyś się dowiedzieć ? Daj nam sobie pomóc\n"
+
 SlackRubyBotServer::Events.configure do |config|
   config.on :command, '/evening_standup' do |command|
     team = Team.find_by(team_id: command[:team_id].to_s) || raise("Cannot find team with ID #{command[:team_id]}.")
@@ -33,7 +34,7 @@ SlackRubyBotServer::Events.configure do |config|
             word[i-1] = command_text[/["#{i}"][.][^(#{i+1}.)]*[#{i+1}][.]/,0].to_s.delete_suffix("#{i+1}.")
           end
         end
-        post_public(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name_normalized], word, "wieczorny")
+        post_public(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name], word, "wieczorny")
         standup = Standup_Check.find_by(user_id: command_user, date_of_stand: date_now, team: team.team_id)
         if standup.nil?
           Standup_Check.create(team: team.team_id, user_id: command_user, evening_stand: true, date_of_stand: date_now)

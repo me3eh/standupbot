@@ -8,13 +8,6 @@ SlackRubyBotServer::Events.configure do |config|
   config.on :command, '/morning_standup' do |command|
     team = Team.find_by(team_id: command[:team_id].to_s) || raise("Cannot find team with ID #{command[:team_id]}.")
     slack_client = Slack::Web::Client.new(token: team.token)
-    # users_in_channel = slack_client.conversations_members(channel: command[:channel_id])[:members]
-    # users_in_channel.each do |u|
-    #   puts slack_client.users_info(user: u)[:user][:name]
-    # end
-    # Standup_Check.all.each do |i|
-    #   puts "#{i.user_id}"
-    # end
     command_text = command[:text]
     command_user = command[:user_id]
     command_channel = command[:channel_id]
@@ -40,7 +33,7 @@ SlackRubyBotServer::Events.configure do |config|
             word[i-1] = command_text[/["#{i}"][.][^(#{i+1}.)]*[#{i+1}][.]/,0].to_s.delete_suffix("#{i+1}.")
           end
         end
-        post_public(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name_normalized], word, "poranny")
+        post_public(slack_client, command_channel, slack_client.users_info(user: command_user)[:user][:profile][:real_name], word, "poranny")
         standup = Standup_Check.find_by(user_id: command_user, date_of_stand: date_now, team: team.team_id)
         if standup.nil?
           Standup_Check.create(team: team.team_id, user_id: command_user, morning_stand: true, date_of_stand: date_now)
