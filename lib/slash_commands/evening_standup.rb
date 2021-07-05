@@ -1,4 +1,4 @@
-EVENING_NOTIFICATION =  "1. Co udało ci sie dzisiaj skończyć\n\n"+
+EVENING_NOTIFICATION =  "1. Co udało ci sie dzisiaj skończyć?\n\n"+
                         "2. Które zadań nie zostały zakończone i na jakim etapie dzisiaj "+
                         "je pozostawiasz ? (pamiętałeś żeby wypchnąć je do repo?)\n\n"+
                         "3. Pojawiły się jakieś blockery?\n\n"+
