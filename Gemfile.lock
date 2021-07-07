@@ -266,6 +266,7 @@ DEPENDENCIES
   database_cleaner
   fabrication
   faker
+  grape
   irb
   kramdown
   newrelic-slack-ruby-bot

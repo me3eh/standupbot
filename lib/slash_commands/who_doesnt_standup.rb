@@ -2,6 +2,7 @@ FIRST_DAY_OF_BOT = Date.new(2021, 7, 5)
 
 SlackRubyBotServer::Events.configure do |config|
   config.on :command, '/who_doesnt_standup' do |command|
+    time = Time.now
     command_text = command[:text]
     command_team = command[:team_id]
     command_channel = command[:channel_id]
@@ -12,8 +13,8 @@ SlackRubyBotServer::Events.configure do |config|
     users_and_bots_in_channel = slack_client.conversations_members(channel: command_channel)[:members]
     hashmap = {}
     everything_about = []
-
     users_in_channel = []
+
     if check_command(command_text)
       year, month, day = command_text.split("-")
       date_requested = Date.new(year.to_i, deleting_zero(month).to_i, deleting_zero(day).to_i)
@@ -39,7 +40,7 @@ SlackRubyBotServer::Events.configure do |config|
           end
           word.each_with_index do |w, index|
             unless w.empty?
-              list_users_with_activity(index, slack_client, command_channel, attachment_content(hashmap, w), date_requested)
+              list_users_with_activity(type_of_text: index, slack_client: slack_client, command_channel: command_channel, command_user: command_user, content_attachment: attachment_content(hashmap, w), date: date_requested)
             end
           end
         end
@@ -52,7 +53,7 @@ SlackRubyBotServer::Events.configure do |config|
     { text: "Jezeli chcesz edytować swoja komende, oto co napisałeś:\n"+
       "#{command[:command]} #{command_text}"
     }
-
+    puts Time.now - time
   end
 end
 

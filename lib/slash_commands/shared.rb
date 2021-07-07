@@ -1,106 +1,122 @@
+MORNING_NOTIFICATION = "1. Jakie zadania na dziś planujesz oraz jak oceniasz czas ich wykonania?\n\n"+
+  "2. Jakie widzisz zagrożenia i blockery w powyższej liście?\n\n"+
+  "3. Czy w któryms z powyższych tematów chciałbyś otrzymać pomoc?\n\n"+
+  "4. Czy w którymś z planowanych zadań przyjąłbyś kompana do Pair programmingu"+
+  " konsultacji / podzielenia się wiedzą doświadczeniami ?\n"
 
+EVENING_NOTIFICATION =  "1. Co udało ci sie dzisiaj skończyć?\n\n"+
+  "2. Które zadań nie zostały zakończone i na jakim etapie dzisiaj "+
+  "je pozostawiasz ? (pamiętałeś żeby wypchnąć je do repo?)\n\n"+
+  "3. Pojawiły się jakieś blockery?\n\n"+
+  "4. Czego nowego się dziś nauczyłeś / dowiedziałeś ? A jeśli niczego "+
+  "to czego w danym temacie chciałbyś się dowiedzieć ? Daj nam sobie pomóc\n"
 def contains_number(str, number)
   !!(str =~ /#{number}/)
 end
 
-def missing_points(array, slack_client, channel_id, command_user, notification)
-  word = "\""
-  array.each_with_index do |number, index|
-    word += number.to_s
-    if index != array.size - 1
-      word += ", "
-    end
-  end
-  word += "\""
-  correct_form = array.size.equal?(1) ? "punktu" : "punktow"
-  slack_client.chat_postEphemeral(channel: channel_id,
-                                  user: command_user,
-                                  "blocks": [
-                                    {
-                                      "type": "header",
-                                      "text": {
-                                        "type": "plain_text",
-                                        "text": "Brak #{word} #{correct_form}. Tak dla przypomnienia:}",
-                                        "emoji": true
-                                      }
-                                    }
-                                  ],
-                                  "attachments": [
-                                    {
-                                      "text": notification,
-                                      "color": "#ff0000",
-                                    }
-                                  ],
-                                  )
-end
+# def missing_points(array, slack_client, channel_id, command_user, notification)
+#   word = "\""
+#   array.each_with_index do |number, index|
+#     word += number.to_s
+#     if index != array.size - 1
+#       word += ", "
+#     end
+#   end
+#   word += "\""
+#   correct_form = array.size.equal?(1) ? "punktu" : "punktow"
+#   slack_client.chat_postEphemeral(channel: channel_id,
+#                                   user: command_user,
+#                                   "blocks": [
+#                                     {
+#                                       "type": "header",
+#                                       "text": {
+#                                         "type": "plain_text",
+#                                         "text": "Brak #{word} #{correct_form}. Tak dla przypomnienia:}",
+#                                         "emoji": true
+#                                       }
+#                                     }
+#                                   ],
+#                                   "attachments": [
+#                                     {
+#                                       "text": notification,
+#                                       "color": "#ff0000",
+#                                     }
+#                                   ],
+#                                   )
+# end
+#
+# def not_correct_order(slack_client, channel_id, command_user, morning_or_evening)
+#   pic = morning_or_evening ?
+#           "https://cdn.discordapp.com/attachments/766045866724163647/861348965043404810/comment_dtoZziPOPyhrsqZLkj29rK5vD0lXBPDa.jpg" :
+#           "https://cdn.discordapp.com/attachments/766045866724163647/861360571706376202/ezgif-1-8349cc09efba.gif"
+#   text = morning_or_evening ?
+#            "Wierzę, że się starałeś. Trzymaj muchomora za to" :
+#            "Essa, wywaliłeś program"
+#
+#   slack_client.chat_postEphemeral(channel: channel_id,
+#                                   user: command_user,
+#                                   "blocks": [
+#                                     {
+#                                       "type": "header",
+#                                       "text": {
+#                                         "type": "plain_text",
+#                                         "text": "Zla kolejnosc.",
+#                                         "emoji": true
+#                                       }
+#                                     },
+#
+#                                     {
+#                                       "type": "section",
+#                                       "text": {
+#                                         "type": "mrkdwn",
+#                                         "text": text
+#                                       }
+#                                     },
+#                                     {
+#                                       "type": "image",
+#                                       "image_url": pic,
+#                                       "alt_text": "Inspiracja"
+#                                     }
+#                                   ],
+#                                   )
+# end
 
-def not_correct_order(slack_client, channel_id, command_user, morning_or_evening)
-  pic = morning_or_evening ?
-          "https://cdn.discordapp.com/attachments/766045866724163647/861348965043404810/comment_dtoZziPOPyhrsqZLkj29rK5vD0lXBPDa.jpg" :
-          "https://cdn.discordapp.com/attachments/766045866724163647/861360571706376202/ezgif-1-8349cc09efba.gif"
-  text = morning_or_evening ?
-           "Wierzę, że się starałeś. Trzymaj muchomora za to" :
-           "Essa, wywaliłeś program"
-
-  slack_client.chat_postEphemeral(channel: channel_id,
-                                  user: command_user,
-                                  "blocks": [
-                                    {
-                                      "type": "header",
-                                      "text": {
-                                        "type": "plain_text",
-                                        "text": "Zla kolejnosc.",
-                                        "emoji": true
-                                      }
-                                    },
-
-                                    {
-                                      "type": "section",
-                                      "text": {
-                                        "type": "mrkdwn",
-                                        "text": text
-                                      }
-                                    },
-                                    {
-                                      "type": "image",
-                                      "image_url": pic,
-                                      "alt_text": "Inspiracja"
-                                    }
-                                  ],
-                                  )
-end
-
-def post_public(slack_client, command_channel, name_of_user, word, morning_or_evening)
+def post_public(slack_client:, command_channel:, name_of_user:, word:, is_morning:)
+  place = word[4].present? ? "\n\n\n*##{word[4]}*" : " "
+  pretext = is_morning ? MORNING_NOTIFICATION : EVENING_NOTIFICATION
+  morning_or_evening = is_morning ?  "poranny" : "wieczorny"
   slack_client.chat_postMessage(channel: command_channel,
-                                as_user: true,
-                                username: "Lol kekw",
                                 "blocks": [
                                   {
                                     "type": "header",
                                     "text": {
                                       "type": "plain_text",
-                                      "text": "Standup #{morning_or_evening}: #{name_of_user}",
+                                      "text": "Standup #{morning_or_evening}: "+
+                                              "#{name_of_user}",
                                       "emoji": true
                                     }
                                   }
                                 ],
                                 "attachments": [
                                   {
-                                    "text": "#{word[0]}\n\n"+
-                                      "#{word[1]}\n\n"+
-                                      "#{word[2]}\n\n"+
-                                      "#{word[3]}\n",
+                                    "pretext": pretext,
+                                    "text": "1. #{word[0]}\n\n"+
+                                      "2. #{word[1]}\n\n"+
+                                      "3. #{word[2]}\n\n"+
+                                      "4. #{word[3]}"+
+                                    "#{place}",
                                     "color": "#00ff00",
                                   }
                                 ],
                                 )
 end
 
-def list_users_with_activity(type_of_text, slack_client, command_channel, content_attachment, date)
+def list_users_with_activity(type_of_text:, slack_client:, command_channel:, command_user:, content_attachment:, date:)
   text_for_header = type_of_header(type_of_text)
   color_for_attachment = type_of_color(type_of_text)
 
-  slack_client.chat_postMessage(channel: command_channel,
+  slack_client.chat_postEphemeral(channel: command_channel,
+                                  user: command_user,
                                 "blocks": [
                                   {
                                     "type": "header",
@@ -228,6 +244,11 @@ def invalid_format(slack_client, command_channel, command_user)
                                                 "np. /who_doesnt_stanup 2137-12-30"
                                       }
                                     },
+                                    {
+                                      "type": "image",
+                                      "image_url": pic,
+                                      "alt_text": "Inspiracja"
+                                    }
                                   ],
                                   )
 end
