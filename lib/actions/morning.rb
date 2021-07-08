@@ -4,7 +4,6 @@ SlackRubyBotServer::Events.configure do |config|
     arguments_from_form = action_payload[:state][:values]
     action_userID = action_payload[:user][:id]
     action_channelID = action_payload[:container][:channel_id]
-
     team = Team.find_by(team_id: action_payload[:user][:team_id].to_s) ||
       raise("Cannot find team with ID #{action_payload[:user][:team_id]}.")
     slack_client = Slack::Web::Client.new(token: team.token)
@@ -17,10 +16,14 @@ SlackRubyBotServer::Events.configure do |config|
 
     responds = []
     arguments_from_form.each.with_index do |u, index|
-      if index != arguments_from_form.size - 1
+      puts u[1]
+      if index != arguments_from_form.size - 2 && index != arguments_from_form.size - 1
         responds.append u[1][:input][:value].nil? ?
         ":speak_no_evil:" :
         u[1][:input][:value]
+      elsif index == arguments_from_form.size - 2
+        responds.append u[1][:actionblank][:selected_options].nil? ?
+          false : true
       else
         responds.append u[1][:choice][:selected_option].nil? ?
         "Idk, gdzieś w przestrzeni kosmicznej" :

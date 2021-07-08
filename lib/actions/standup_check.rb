@@ -1,6 +1,5 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :action, 'block_actions', 'actionId-2' do |action1|
-    time = Time.now
     action_payload = action1[:payload]
     channel_id = action_payload[:container][:channel_id]
     user_id = action_payload[:user][:id]
@@ -30,8 +29,12 @@ SlackRubyBotServer::Events.configure do |config|
         responses[index] = u[1][:action][:selected_options]
       end
     end
-    if responses[0] > Date.today || responses[0] < Date.new(2021, 7, 5)
-      incorrect_data(slack_client, channel_id, user_id)
+    birth_day_of_bot = Date.new(2021, 7, 5)
+    date_today = Date.today
+    if responses[0] > Date.today || responses[0] < birth_day_of_bot
+      incorrect_data(slack_client: slack_client, channel_id: channel_id,
+                     command_user: user_id, date: responses[0],
+                     birth_date_of_bot: birth_day_of_bot, today: date_today)
     else
       word = []
       word.append(Standup_Check.where(date_of_stand: responses[0],
@@ -43,7 +46,7 @@ SlackRubyBotServer::Events.configure do |config|
       word.append(word[0] & word[1])
       word.append(users_in_channel - word[0] - word[1])
       word.insert(0, word.delete_at(3))
-      (1..2).each do |i|
+      1.upto 2 do |i|
         word[i] = word[i] - word[3]
       end
       if responses[1].empty?
@@ -66,7 +69,6 @@ SlackRubyBotServer::Events.configure do |config|
       end
 
     end
-    puts Time.now - time
   end
 end
 

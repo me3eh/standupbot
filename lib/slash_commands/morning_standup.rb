@@ -12,7 +12,6 @@ SlackRubyBotServer::Events.configure do |config|
     slack_client.chat_postEphemeral(
       channel: command[:channel_id],
       user: command[:user_id],
-      "type": "modal",
       "blocks": [
         {
           "type": "header",
@@ -27,14 +26,13 @@ SlackRubyBotServer::Events.configure do |config|
           "element": {
             "type": "plain_text_input",
             "multiline": true,
-
             "action_id": "input"
           },
           "label": {
             "type": "plain_text",
             "text": "1. Jakie zadania na dziś planujesz oraz jak oceniasz czas ich wykonania?",
             "emoji": true
-          },
+          }
         },
         {
           "type": "divider"
@@ -97,6 +95,28 @@ SlackRubyBotServer::Events.configure do |config|
           "type": "actions",
           "elements": [
             {
+              "type": "checkboxes",
+              "options": [
+                {
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Open for PP*"
+                  },
+                  "description": {
+                    "type": "mrkdwn",
+                    "text": "*Zaznaczenie na własną odpowiedzialność*"
+                  },
+                  "value": "value-2"
+                }
+              ],
+              "action_id": "actionblank"
+            }
+          ]
+        },
+        {
+          "type": "actions",
+          "elements": [
+            {
               "type": "radio_buttons",
               "options": [
                 {
@@ -135,7 +155,7 @@ SlackRubyBotServer::Events.configure do |config|
             }
           ]
         }
-        ]
+      ]
       )
     {text: "Mood_check:\n"+"https://theuselessweb.com/"}
   end

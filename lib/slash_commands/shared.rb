@@ -83,9 +83,10 @@ end
 # end
 
 def post_public(slack_client:, command_channel:, name_of_user:, word:, pic:)
-  place = word[4].present? ? "\n\n\n*##{word[4]}*" : " "
-  pretext = word[4].present? ? MORNING_NOTIFICATION : EVENING_NOTIFICATION
-  morning_or_evening = word[4].present? ?  "poranny" : "wieczorny"
+  open_for_pp = word[4] ? "\t*#Open for PP*" : " "
+  place = word[5].present? ? "\n\n\n*##{word[5]}*" : " "
+  pretext = word[5].present? ? MORNING_NOTIFICATION : EVENING_NOTIFICATION
+  morning_or_evening = word[5].present? ?  "poranny" : "wieczorny"
   slack_client.chat_postMessage(
     channel: command_channel,
     "blocks": [
@@ -119,7 +120,7 @@ def post_public(slack_client:, command_channel:, name_of_user:, word:, pic:)
           "2. #{word[1]}\n\n"+
           "3. #{word[2]}\n\n"+
           "4. #{word[3]}"+
-          "#{place}",
+          "#{place}#{open_for_pp}",
         "color": "#00ff00",
       }
     ],
@@ -210,8 +211,13 @@ def type_of_color(type_of_text)
   end
 end
 
-def incorrect_data(slack_client, channel_id, command_user)
+def incorrect_data(slack_client:, channel_id:, command_user:, date:, birth_date_of_bot:, today:)
   pic = "https://cdn.discordapp.com/attachments/766045866724163647/861524060445081620/ezgif.com-gif-maker3.gif"
+  words = "Albo podałeś datę przed narodzinami bota, albo witamy w przyszłości\n"
+  words += "Podałeś datę: #{date}\n"
+  words += "Bot narodzony: #{birth_date_of_bot}\n"
+  words += "Dzisiejszy data: #{today}"
+
   slack_client.chat_postEphemeral(
     channel: channel_id,
     user: command_user,
@@ -228,7 +234,7 @@ def incorrect_data(slack_client, channel_id, command_user)
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "Albo podałeś datę przed narodzinami bota, albo witamy w przyszłości"
+          "text": words
         }
       },
       {
@@ -238,59 +244,60 @@ def incorrect_data(slack_client, channel_id, command_user)
       }
     ],
   )
-end
-def invalid_data(slack_client, command_channel, command_user)
-  pic = "https://cdn.discordapp.com/attachments/766045866724163647/861541674361552916/heavy.gif"
-  slack_client.chat_postEphemeral(channel: command_channel,
-                                  user: command_user,
-                                  "blocks": [
-                                    {
-                                      "type": "header",
-                                      "text": {
-                                        "type": "plain_text",
-                                        "text": "Nie zastosowałeś się do moich poleceń",
-                                        "emoji": true
-                                      }
-                                    },
-                                    {
-                                      "type": "image",
-                                      "image_url": pic,
-                                      "alt_text": "Inspiracja"
-                                    }
-                                  ],
-                                  )
 end
 
-def invalid_format(slack_client, command_channel, command_user)
-  pic = "https://cdn.discordapp.com/attachments/766045866724163647/861541674361552916/heavy.gif"
-  slack_client.chat_postEphemeral(
-    channel: command_channel,
-    user: command_user,
-    "blocks": [
-      {
-        "type": "header",
-        "text": {
-          "type": "plain_text",
-          "text": "No troszkę zepsułeś komendę",
-          "emoji": true
-        }
-      },
-      {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
-          "text": "Zły format daty:\n Użycie: */who_doesnt_standup YYYY-MM-DD*, gdzie MM <1:12>, a DD <1:31>\n"+
-            "np. /who_doesnt_stanup 2137-12-30"
-        }
-      },
-      {
-        "type": "image",
-        "image_url": pic,
-        "alt_text": "Inspiracja"
-      }
-    ],
-  )
-end
+# def invalid_data(slack_client, command_channel, command_user)
+#   pic = "https://cdn.discordapp.com/attachments/766045866724163647/861541674361552916/heavy.gif"
+#   slack_client.chat_postEphemeral(channel: command_channel,
+#                                   user: command_user,
+#                                   "blocks": [
+#                                     {
+#                                       "type": "header",
+#                                       "text": {
+#                                         "type": "plain_text",
+#                                         "text": "Nie zastosowałeś się do moich poleceń",
+#                                         "emoji": true
+#                                       }
+#                                     },
+#                                     {
+#                                       "type": "image",
+#                                       "image_url": pic,
+#                                       "alt_text": "Inspiracja"
+#                                     }
+#                                   ],
+#                                   )
+# end
+
+# def invalid_format(slack_client, command_channel, command_user)
+#   pic = "https://cdn.discordapp.com/attachments/766045866724163647/861541674361552916/heavy.gif"
+#   slack_client.chat_postEphemeral(
+#     channel: command_channel,
+#     user: command_user,
+#     "blocks": [
+#       {
+#         "type": "header",
+#         "text": {
+#           "type": "plain_text",
+#           "text": "No troszkę zepsułeś komendę",
+#           "emoji": true
+#         }
+#       },
+#       {
+#         "type": "section",
+#         "text": {
+#           "type": "mrkdwn",
+#           "text": "Zły format daty:\n Użycie: */who_doesnt_standup YYYY-MM-DD*, gdzie MM <1:12>, a DD <1:31>\n"+
+#             "np. /who_doesnt_stanup 2137-12-30"
+#         }
+#       },
+#       {
+#         "type": "image",
+#         "image_url": pic,
+#         "alt_text": "Inspiracja"
+#       }
+#     ],
+#   )
+# end
 
 def check_order(str)
   !!(str =~ /^1[.].*2[.].*3[.].*4[.]/)
