@@ -137,6 +137,6 @@ SlackRubyBotServer::Events.configure do |config|
         }
         ]
       )
-    {text: 'Mood_check:\n'+'https://theuselessweb.com/'}
+    {text: "Mood_check:\n"+"https://theuselessweb.com/"}
   end
 end

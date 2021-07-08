@@ -1,16 +1,23 @@
 
 SlackRubyBotServer::Events.configure do |config|
   config.on :command, '/help' do |command|
-    morning_standup = "*/morning_standup* - wygadaj się z rana przy kawie\n"+
-                      "Użycie: wpisujesz /morning_standup => wciskasz enter => uzupelniasz formularz => zatwierdzasz formularz"
-    evening_standup = "*/evening_standup* - wyżal się wieczorem przy piwie\n"+
-                      "Użycie: wpisujesz /evening_standup => wciskasz enter => uzupelniasz formularz => zatwierdzasz formularz"
-    who_doesnt_standup = "*/who_doesnt_standup* - pokazuje urwisów, którzy się nie wygadują\n"+
-      "Użycie: */who_doesnt_standup YYYY-MM-DD*\n (MM = <1:12>, D =<1:31>)"+
-      "Jezeli cos, to teraz po cichu pokazuje :smile"
+    morning_standup =
+      "*/morning_standup* - wygadaj się z rana przy kawie\n"+
+        "Użycie: wpisujesz /morning_standup => wciskasz enter => uzupelniasz formularz => zatwierdzasz formularz"
+
+    evening_standup =
+      "*/evening_standup* - wyżal się wieczorem przy piwie\n"+
+      "Użycie: wpisujesz /evening_standup => wciskasz enter => uzupelniasz formularz => zatwierdzasz formularz"
+
+    who_doesnt_standup =
+      "*/who_doesnt_standup* - pokazuje urwisów, którzy się nie wygadują\n"+
+      "Użycie: wpisujesz /who_doesnt_standup => wciskasz enter => uzupełniasz formularz => zatwierdzasz formularz"
+
     help = "*/help*\nP-patrzysz na to teraz :point_right::point_left:"
+
     team = Team.find_by(team_id: command[:team_id].to_s) ||
       raise("Cannot find team with ID #{command[:team_id]}.")
+
     slack_client = Slack::Web::Client.new(token: team.token)
     command_channel = command[:channel_id]
     command_user = command[:user_id]

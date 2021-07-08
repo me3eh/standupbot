@@ -2,6 +2,7 @@
 # class Users
 #   def call(users_and_bots_in_channel, slack_client)
 #     @users, @users_name ||= initialization_of_hashmap_and_array(users_and_bots_in_channel, slack_client)
+#     return @users, @users_name
 #   end
 # end
 #

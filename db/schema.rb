@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_04_175443) do
+ActiveRecord::Schema.define(version: 2021_07_08_115344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,10 @@ ActiveRecord::Schema.define(version: 2021_07_04_175443) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "team"
+    t.string "ts_of_message_morning"
+    t.string "channel_of_message_morning"
+    t.string "ts_of_message_evening"
+    t.string "channel_of_message_evening"
   end
 
   create_table "teams", force: :cascade do |t|
