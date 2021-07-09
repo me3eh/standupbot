@@ -1,16 +1,14 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :action, 'block_actions', 'actionId-2' do |action1|
+    time_now = Time.now
     action_payload = action1[:payload]
     channel_id = action_payload[:container][:channel_id]
     user_id = action_payload[:user][:id]
-    team = Team.find_by(team_id: action_payload[:user][:team_id].to_s) ||
+    team = Team.find_by(team_id: action_payload[:user][:team_id]) ||
       raise("Cannot find team with ID #{action_payload[:user][:team_id]}.")
     slack_client = Slack::Web::Client.new(token: team.token)
-
     Faraday.post(action_payload[:response_url], {
       text: 'Dzięki za przeslanie',
-      "blocks":[
-      ],
     }.to_json, 'Content-Type' => 'application/json')
     { ok: true }
     hashmap = {}
@@ -37,21 +35,27 @@ SlackRubyBotServer::Events.configure do |config|
                      birth_date_of_bot: birth_day_of_bot, today: date_today)
     else
       word = []
+      excusal = Free_From_Standup.where("date_of_beginning <= ? AND date_of_ending >= ?", responses[0], responses[0]).map(&:user_id)
+      excusal = excusal.uniq
       word.append(Standup_Check.where(date_of_stand: responses[0],
                                       team: team.team_id,
                                       morning_stand: true).map(&:user_id))
       word.append(Standup_Check.where(date_of_stand: responses[0],
                                       team: team.team_id,
                                       evening_stand: true).map(&:user_id))
+      users_in_channel = users_in_channel - excusal
+      word[0] = word[0] - excusal
+      word[1] = word[1] - excusal
       word.append(word[0] & word[1])
       word.append(users_in_channel - word[0] - word[1])
       word.insert(0, word.delete_at(3))
       1.upto 2 do |i|
         word[i] = word[i] - word[3]
       end
+      word.append excusal
       if responses[1].empty?
         word.each_with_index do |w, index|
-          list_users_with_activity_private(
+          list_users_private(
             type_of_text: index, slack_client: slack_client,
             command_channel: channel_id, command_user: user_id,
             content_attachment: attachment_content(hashmap: hashmap,
@@ -60,14 +64,13 @@ SlackRubyBotServer::Events.configure do |config|
         end
       else
         word.each_with_index do |w, index|
-          list_users_with_activity_public(
+          list_users_public(
             type_of_text: index, slack_client: slack_client,
             command_channel: channel_id, date: responses[0],
             content_attachment:
               attachment_content(hashmap: hashmap, users: w)) unless w.empty?
         end
       end
-
     end
   end
 end

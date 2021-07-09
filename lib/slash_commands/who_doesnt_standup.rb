@@ -4,6 +4,7 @@ SlackRubyBotServer::Events.configure do |config|
       raise("Cannot find team with ID #{command[:team_id]}.")
 
     slack_client = Slack::Web::Client.new(token: team.token)
+    today_now = Date.today
     slack_client.chat_postEphemeral(
       channel: command[:channel_id],
       user: command[:user_id],
@@ -16,7 +17,7 @@ SlackRubyBotServer::Events.configure do |config|
           },
           "accessory": {
             "type": "datepicker",
-            "initial_date": "2021-07-07",
+            "initial_date": "#{today_now}",
             "placeholder": {
               "type": "plain_text",
               "text": "Select a date",

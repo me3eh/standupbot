@@ -16,7 +16,6 @@ SlackRubyBotServer::Events.configure do |config|
 
     responds = []
     arguments_from_form.each.with_index do |u, index|
-      puts u[1]
       if index != arguments_from_form.size - 2 && index != arguments_from_form.size - 1
         responds.append u[1][:input][:value].nil? ?
         ":speak_no_evil:" :

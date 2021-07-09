@@ -82,7 +82,10 @@ end
 #                                   )
 # end
 
-def post_public(slack_client:, command_channel:, name_of_user:, word:, pic:)
+def post_public(slack_client:,
+                command_channel:,
+                name_of_user:,
+                word:, pic:)
   open_for_pp = word[4] ? "\t*#Open for PP*" : " "
   place = word[5].present? ? "\n\n\n*##{word[5]}*" : " "
   pretext = word[5].present? ? MORNING_NOTIFICATION : EVENING_NOTIFICATION
@@ -127,7 +130,11 @@ def post_public(slack_client:, command_channel:, name_of_user:, word:, pic:)
   )
 end
 
-def list_users_with_activity_private(type_of_text:, slack_client:, command_channel:, command_user:, content_attachment:, date:)
+def list_users_private(type_of_text:,
+                                     slack_client:,
+                                     command_channel:,
+                                     command_user:,
+                                     content_attachment:, date:)
   text_for_header = type_of_header(type_of_text)
   color_for_attachment = type_of_color(type_of_text)
   slack_client.chat_postEphemeral(
@@ -151,7 +158,8 @@ def list_users_with_activity_private(type_of_text:, slack_client:, command_chann
     ],
   )
 end
-def list_users_with_activity_public(type_of_text:, slack_client:, command_channel:, content_attachment:, date:)
+def list_users_public(type_of_text:, slack_client:,
+                      command_channel:, content_attachment:, date:)
   text_for_header = type_of_header(type_of_text)
   color_for_attachment = type_of_color(type_of_text)
   slack_client.chat_postMessage(
@@ -164,7 +172,7 @@ def list_users_with_activity_public(type_of_text:, slack_client:, command_channe
           "text": "#{text_for_header} w dniu #{date}",
           "emoji": true
         }
-      }
+      },
     ],
     "attachments": [
       {
@@ -193,6 +201,8 @@ def type_of_header(type_of_text)
     "Osoby, które złożyły tylko standup wieczorny"
   when 3
     "Osoby, które złożyły oba standupy i są już wolne"
+  when 4
+    "Osoby zwolnione ze standupu"
   else
     "Idk, coś zwaliłeś"
   end
@@ -206,6 +216,8 @@ def type_of_color(type_of_text)
     "#ffff00"
   when 3
     "#00ff00"
+  when 4
+    "#aa00ff"
   else
     "Idk, coś zwaliłeś"
   end

@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_115344) do
+ActiveRecord::Schema.define(version: 2021_07_09_123202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "free_from_standups", force: :cascade do |t|
+    t.string "user_id", null: false
+    t.date "date_of_beginning"
+    t.date "date_of_ending"
+    t.string "reason"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "standup_checks", force: :cascade do |t|
     t.string "user_id", null: false
