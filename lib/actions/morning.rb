@@ -22,7 +22,7 @@ SlackRubyBotServer::Events.configure do |config|
         ":speak_no_evil:" :
         u[1][:input][:value]
       elsif index == arguments_from_form.size - 2
-        responds.append u[1][:actionblank][:selected_options].nil? ?
+        responds.append u[1][:actionblank][:selected_options].empty? ?
           false : true
       else
         responds.append u[1][:choice][:selected_option].nil? ?
