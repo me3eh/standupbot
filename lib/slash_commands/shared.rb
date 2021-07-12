@@ -11,85 +11,12 @@ EVENING_NOTIFICATION =  "1. Co udało ci sie dzisiaj skończyć?\n\n"+
   "4. Czego nowego się dziś nauczyłeś / dowiedziałeś ? A jeśli niczego "+
   "to czego w danym temacie chciałbyś się dowiedzieć ? Daj nam sobie pomóc\n"
 
-def contains_number(str, number)
-  !!(str =~ /#{number}/)
-end
-
-# def missing_points(array, slack_client, channel_id, command_user, notification)
-#   word = "\""
-#   array.each_with_index do |number, index|
-#     word += number.to_s
-#     if index != array.size - 1
-#       word += ", "
-#     end
-#   end
-#   word += "\""
-#   correct_form = array.size.equal?(1) ? "punktu" : "punktow"
-#   slack_client.chat_postEphemeral(channel: channel_id,
-#                                   user: command_user,
-#                                   "blocks": [
-#                                     {
-#                                       "type": "header",
-#                                       "text": {
-#                                         "type": "plain_text",
-#                                         "text": "Brak #{word} #{correct_form}. Tak dla przypomnienia:}",
-#                                         "emoji": true
-#                                       }
-#                                     }
-#                                   ],
-#                                   "attachments": [
-#                                     {
-#                                       "text": notification,
-#                                       "color": "#ff0000",
-#                                     }
-#                                   ],
-#                                   )
-# end
-#
-# def not_correct_order(slack_client, channel_id, command_user, morning_or_evening)
-#   pic = morning_or_evening ?
-#           "https://cdn.discordapp.com/attachments/766045866724163647/861348965043404810/comment_dtoZziPOPyhrsqZLkj29rK5vD0lXBPDa.jpg" :
-#           "https://cdn.discordapp.com/attachments/766045866724163647/861360571706376202/ezgif-1-8349cc09efba.gif"
-#   text = morning_or_evening ?
-#            "Wierzę, że się starałeś. Trzymaj muchomora za to" :
-#            "Essa, wywaliłeś program"
-#
-#   slack_client.chat_postEphemeral(channel: channel_id,
-#                                   user: command_user,
-#                                   "blocks": [
-#                                     {
-#                                       "type": "header",
-#                                       "text": {
-#                                         "type": "plain_text",
-#                                         "text": "Zla kolejnosc.",
-#                                         "emoji": true
-#                                       }
-#                                     },
-#
-#                                     {
-#                                       "type": "section",
-#                                       "text": {
-#                                         "type": "mrkdwn",
-#                                         "text": text
-#                                       }
-#                                     },
-#                                     {
-#                                       "type": "image",
-#                                       "image_url": pic,
-#                                       "alt_text": "Inspiracja"
-#                                     }
-#                                   ],
-#                                   )
-# end
-
-def post_public(slack_client:,
+def post_public_morning(slack_client:,
                 command_channel:,
                 name_of_user:,
                 word:, pic:)
   open_for_pp = word[4] ? "\t*#Open for PP*" : " "
-  place = word[5].present? ? "\n\n\n*##{word[5]}*" : " "
-  pretext = word[5].present? ? MORNING_NOTIFICATION : EVENING_NOTIFICATION
-  morning_or_evening = word[5].present? ?  "poranny" : "wieczorny"
+  place = "\n\n\n*##{word[5]}*"
   slack_client.chat_postMessage(
     channel: command_channel,
     "blocks": [
@@ -97,7 +24,7 @@ def post_public(slack_client:,
         "type": "header",
         "text": {
           "type": "plain_text",
-          "text": "Standup #{morning_or_evening}: "+
+          "text": "Standup poranny: "+
             "#{name_of_user}",
           "emoji": true
         }
@@ -107,7 +34,7 @@ def post_public(slack_client:,
         "block_id": "section567",
         "text": {
           "type": "mrkdwn",
-          "text": "#{pretext}"
+          "text": MORNING_NOTIFICATION
         },
         "accessory": {
           "type": "image",
@@ -127,6 +54,50 @@ def post_public(slack_client:,
         "color": "#00ff00",
       }
     ],
+  )
+end
+
+def post_public_evening(slack_client:,
+               command_channel:,
+               name_of_user:,
+               word:, pic:)
+  slack_client.chat_postMessage(
+  channel: command_channel,
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "Standup wieczorny: "+
+          "#{name_of_user}",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "block_id": "section567",
+      "text": {
+        "type": "mrkdwn",
+        "text": EVENING_NOTIFICATION
+      },
+      "accessory": {
+        "type": "image",
+        "image_url": "#{pic}",
+        "alt_text": "Profile_picture"
+      }
+    },
+  ],
+
+  "attachments": [
+    {
+      "text": "1. #{word[0]}\n\n"+
+        "2. #{word[1]}\n\n"+
+        "3. #{word[2]}\n\n"+
+        "4. #{word[3]}\n\n\n"+
+        "*PRy/Tickety i ich estymacje:*\n\n #{word[4]}",
+      "color": "#00ff00",
+    }
+  ],
   )
 end
 
@@ -158,6 +129,7 @@ def list_users_private(type_of_text:,
     ],
   )
 end
+
 def list_users_public(type_of_text:, slack_client:,
                       command_channel:, content_attachment:, date:)
   text_for_header = type_of_header(type_of_text)
@@ -256,67 +228,6 @@ def incorrect_data(slack_client:, channel_id:, command_user:, date:, birth_date_
       }
     ],
   )
-end
-
-# def invalid_data(slack_client, command_channel, command_user)
-#   pic = "https://cdn.discordapp.com/attachments/766045866724163647/861541674361552916/heavy.gif"
-#   slack_client.chat_postEphemeral(channel: command_channel,
-#                                   user: command_user,
-#                                   "blocks": [
-#                                     {
-#                                       "type": "header",
-#                                       "text": {
-#                                         "type": "plain_text",
-#                                         "text": "Nie zastosowałeś się do moich poleceń",
-#                                         "emoji": true
-#                                       }
-#                                     },
-#                                     {
-#                                       "type": "image",
-#                                       "image_url": pic,
-#                                       "alt_text": "Inspiracja"
-#                                     }
-#                                   ],
-#                                   )
-# end
-
-# def invalid_format(slack_client, command_channel, command_user)
-#   pic = "https://cdn.discordapp.com/attachments/766045866724163647/861541674361552916/heavy.gif"
-#   slack_client.chat_postEphemeral(
-#     channel: command_channel,
-#     user: command_user,
-#     "blocks": [
-#       {
-#         "type": "header",
-#         "text": {
-#           "type": "plain_text",
-#           "text": "No troszkę zepsułeś komendę",
-#           "emoji": true
-#         }
-#       },
-#       {
-#         "type": "section",
-#         "text": {
-#           "type": "mrkdwn",
-#           "text": "Zły format daty:\n Użycie: */who_doesnt_standup YYYY-MM-DD*, gdzie MM <1:12>, a DD <1:31>\n"+
-#             "np. /who_doesnt_stanup 2137-12-30"
-#         }
-#       },
-#       {
-#         "type": "image",
-#         "image_url": pic,
-#         "alt_text": "Inspiracja"
-#       }
-#     ],
-#   )
-# end
-
-def check_order(str)
-  !!(str =~ /^1[.].*2[.].*3[.].*4[.]/)
-end
-
-def check_command(str)
-  !!(str =~ /^[2][0-9]{3}-((0[0-9])|(1[1-2]))-(([0-2][0-9])|3[0-1]$)/)
 end
 
 def randomizing

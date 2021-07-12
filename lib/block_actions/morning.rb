@@ -30,7 +30,7 @@ SlackRubyBotServer::Events.configure do |config|
       end
     end
 
-    ts_message = post_public(
+    ts_message = post_public_morning(
       slack_client: slack_client,
       command_channel: action_channelID,
       name_of_user: slack_client.users_info(user: action_userID)[:user][:profile][:real_name],

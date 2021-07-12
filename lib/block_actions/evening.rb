@@ -24,7 +24,7 @@ SlackRubyBotServer::Events.configure do |config|
     slack_client = Slack::Web::Client.new(token: team.token)
     pic = slack_client.users_info(user: action_userID)[:user][:profile][:image_192]
 
-    ts_message = post_public(
+    ts_message = post_public_evening(
       slack_client: slack_client,
       command_channel: action_channelID,
       name_of_user: slack_client.users_info(user: action_userID)[:user][:profile][:real_name],

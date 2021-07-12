@@ -9,7 +9,6 @@ SlackRubyBotServer::Events.configure do |config|
     slack_client.chat_postEphemeral(
       channel: command[:channel_id],
       user: command[:user_id],
-      "type": "modal",
       "blocks": [
         {
           "type": "header",
@@ -90,6 +89,19 @@ SlackRubyBotServer::Events.configure do |config|
             "text": "4. Czego nowego się dziś nauczyłeś / dowiedziałeś?"+
               "A jeśli niczego to czego w danym temacie chciałbyś się +"+
               "dowiedzieć ? Daj nam sobie pomóc",
+            "emoji": true
+          }
+        },
+        {
+          "type": "input",
+          "element": {
+            "type": "plain_text_input",
+            "multiline": true,
+            "action_id": "input"
+          },
+          "label": {
+            "type": "plain_text",
+            "text": "Tutaj wrzuć swoje tickety/pry oraz czas ich wykonania - spokojnie, opcjonalne",
             "emoji": true
           }
         },

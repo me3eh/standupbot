@@ -1,80 +1,65 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :command, '/no_standup' do |command|
-    today_now = Date.today
-    Faraday.post(command[:response_url], {
-      response_type: 'ephemeral',
-      "blocks": [
-        {
-          "type": "header",
-          "text": {
-            "type": "plain_text",
-            "text": "Zwolnienie ze standupu",
-            "emoji": true
-          }
-        },
-        {
-          "type": "actions",
-          "elements": [
-            {
-              "type": "datepicker",
-              "initial_date": "#{today_now}",
-              "placeholder": {
-                "type": "plain_text",
-                "text": "Select a date",
-                "emoji": true
-              },
-              "action_id": "date-picker-1"
-            },
-            {
-              "type": "datepicker",
-              "initial_date": "#{today_now}",
-              "placeholder": {
-                "type": "plain_text",
-                "text": "Select a date",
-                "emoji": true
-              },
-              "action_id": "date-picker-2"
-            },
-            {
-              "type": "users_select",
-              "placeholder": {
-                "type": "plain_text",
-                "text": "Wybierz symulanta",
-                "emoji": true
-              },
-              "initial_user": "#{command[:user_id]}"
-            },
-          ]
-        },
-        {
-          "type": "input",
-          "element": {
-            "type": "plain_text_input",
-            "action_id": "input"
+    team = Team.find_by(team_id: command[:team_id].to_s) ||
+      raise("Cannot find team with ID #{command[:team_id]}.")
+    slack_client = Slack::Web::Client.new(token: team.token)
+
+
+    slack_client.chat_postEphemeral(
+      channel: command[:channel_id],
+      user: command[:user_id],
+      "text": "Wybierz swoją opcję",
+      "attachments": [
+      {
+        "fallback": "Something wrong happened. GIVE BACK WORKING BOT",
+        "callback_id": "choice_for_excusal",
+        "color": "#3AA3E3",
+        "attachment_type": "default",
+        "actions": [
+          {
+            "name": "game",
+            "text": ":heavy_plus_sign: Dodaj zwolnienie",
+            "type": "button",
+            "style": "primary",
+            "value": "add",
           },
-          "label": {
-            "type": "plain_text",
-            "text": "Powód",
-            "emoji": true
-          }
-        },
+          {
+            "name": "game",
+            "text": ":heavy_minus_sign: Usun zwolnienie",
+            "type": "button",
+            "style": "danger",
+            "value": "delete",
+      },
+          {
+            "name": "game",
+            "text": "Wylistuj zwolnienia",
+            "style": "danger",
+            "value": "list",
+          },
+        ]
+      }
+      ]
+    )
+    {
+      "blocks":[
         {
-          "type": "actions",
-          "elements": [
-            {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "Click Me",
-                "emoji": true
-              },
-              "value": "click_me_123",
-              "action_id": "actionId-3"
-            }
-          ]
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Jezeli chcesz, usun wszystkie teksty tylko widoczne dla ciebie"
+          },
+          "accessory": {
+            "type": "button",
+            "text": {
+              "type": "plain_text",
+              "text": "Klikej jezeli jestes pewien :flushed:",
+              "emoji": true
+            },
+            "value": "click",
+            "action_id": "deleting"
+          }
         }
       ]
-    }.to_json, 'Content-Type' => 'application/json')
-  { ok: true }
+    }
   end
 end

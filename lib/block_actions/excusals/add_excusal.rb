@@ -1,18 +1,8 @@
 SlackRubyBotServer::Events.configure do |config|
-  config.on :action, 'block_actions', 'actionId-3' do |action|
+  config.on :action, 'block_actions', 'add_excusal' do |action|
     action_payload = action[:payload]
-    puts action_payload
     response_url = action_payload[:response_url]
     arguments_from_form = action_payload[:state][:values]
-
-    # Faraday.post(response_url, {
-    #   response_type: 'ephemeral',
-    #   "text": "Już odznaczone :white_check_mark:",
-    # }.to_json, 'Content-Type' => 'application/json')
-
-    # first and second elements in response are date and the
-    # third one is user for whom is day free from standup
-
     response = []
     truth = true
     arguments_from_form.each do |argument_for_user|
@@ -41,8 +31,6 @@ SlackRubyBotServer::Events.configure do |config|
         response_type: 'ephemeral',
         "text": "Już odznaczone :white_check_mark:",
       }.to_json, 'Content-Type' => 'application/json')
-
     end
-
   end
 end
