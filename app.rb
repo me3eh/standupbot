@@ -17,6 +17,7 @@ require_relative 'lib/actions'
 require 'yaml'
 require 'erb'
 
+
 ActiveRecord::Base.establish_connection(
   YAML.safe_load(
     ERB.new(
@@ -24,3 +25,5 @@ ActiveRecord::Base.establish_connection(
     ).result, [], [], true
   )[ENV['RACK_ENV']]
 )
+
+$everything_needed = Everything_Needed.new

@@ -1,27 +1,28 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :action, 'interactive_message', 'choice_for_excusal' do |action|
     action_payload = action[:payload]
-    response_url = action_payload[:response_url]
     user_id = action_payload[:user][:id]
-
+    team_id = action_payload[:team][:id]
+    team = Team.find_by(team_id: team_id) ||
+      raise("Cannot find team with ID #{team_id}.")
+    slack_client = Slack::Web::Client.new(token: team.token)
     case action_payload[:actions][0][:value]
     when "add"
       add_block(user_id)
     when "delete"
       delete_block
     when "list"
-      list_block(response_url)
+      list_block(slack_client)
     else
       {text: "idk, coś się stało"}
     end
-
   end
 end
 
 def add_block(user_id)
   today_now = Date.today
   {
-    text:"chuj",
+    text:"its not gonna show",
     blocks: [
       {
         "type": "header",
@@ -125,7 +126,7 @@ def delete_block
             "type": "button",
             "text": {
               "type": "plain_text",
-              "text": "Click Me",
+              "text": "Zatwierdź",
               "emoji": true
             },
             "value": "click_me_123",
@@ -137,18 +138,64 @@ def delete_block
   }
 end
 
-def list_block(response_url)
-Faraday.post(response_url,{
-  response_type: 'ephemeral',
-
-  }.to_json, 'Content-Type' => 'application/json')
+def list_block(slack_client)
+  json_blocks = []
+  names = {}
+  pics = {}
+  Free_From_Standup.all.each do |u|
+    name = names[:"#{u.user_id}"]
+    if name.nil?
+      user_info = slack_client.users_info(user: u.user_id)[:user][:profile]
+      names = names.merge({"#{u.user_id}": "#{user_info[:real_name]}"})
+      pics = pics.merge({"#{u.user_id}": "#{user_info[:image_192]}"})
+      name = names[:"#{u.user_id}"]
+    end
+    pic = pics[:"#{u.user_id}"]
+    json_blocks.append(add_json_blocks(id_of_excusal: u.id,
+                                       beginning_date_of_excusal: u.date_of_beginning,
+                                       ending_date_of_excusal: u.date_of_ending,
+                                       name: name,
+                                       pic: pic,
+                                       excusal: u.reason))
+    json_blocks.append(add_json_divider)
+  end
+  {
+    text: "its not gonna show up",
+    blocks: json_blocks,
+  }
 end
 
 def add_to_select
-  pk = []
-  Free_From_Standup.all.each.with_index do |u, index|
-    p = {'text': {'type': 'plain_text', 'text': "ID zwolnienia:#{u.id}"}, 'value': "#{u.id}"}
-    pk.append(p)
+  array_storing = []
+  Free_From_Standup.all.each do |u|
+    array_storing.append( {'text': {'type': 'plain_text', 'text': "ID zwolnienia:#{u.id}"}, 'value': "#{u.id}"} )
   end
-  pk
+  array_storing
+end
+
+def add_json_blocks(id_of_excusal:, beginning_date_of_excusal:,
+                    ending_date_of_excusal:, name:, pic:, excusal:)
+
+  excusal = excusal.nil? ? "Brak powodu" : excusal
+  {
+    "type": "context",
+    "elements": [
+      {
+        "type": "image",
+        "image_url": pic,
+        "alt_text": "cute cat"
+      },
+      {
+        "type": "mrkdwn",
+        "text": "*#{id_of_excusal}* - #{name} - od #{beginning_date_of_excusal}"+
+                "do #{ending_date_of_excusal}\n*Powód:*#{excusal}"
+      }
+      ]
+  }
+end
+
+def add_json_divider
+  {
+    "type": "divider"
+  }
 end

@@ -1,6 +1,5 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :action, 'block_actions', 'actionId-2' do |action1|
-    time_now = Time.now
     action_payload = action1[:payload]
     channel_id = action_payload[:container][:channel_id]
     user_id = action_payload[:user][:id]
@@ -13,7 +12,8 @@ SlackRubyBotServer::Events.configure do |config|
     { ok: true }
     hashmap = {}
     users_in_channel = []
-    slack_client.conversations_members(channel: channel_id)[:members].each do |u|
+    slack_client.conversations_members(
+      channel: channel_id)[:members].each do |u|
       info_about = slack_client.users_info(user: u)[:user]
       hashmap = hashmap.merge({u => info_about[:profile][:real_name]})
       users_in_channel.append(u) unless info_about[:is_bot]
@@ -35,7 +35,12 @@ SlackRubyBotServer::Events.configure do |config|
                      birth_date_of_bot: birth_day_of_bot, today: date_today)
     else
       word = []
-      excusal = Free_From_Standup.where("date_of_beginning <= ? AND date_of_ending >= ?", responses[0], responses[0]).map(&:user_id)
+
+      excusal =
+        Free_From_Standup.where(
+          "date_of_beginning <= ? AND date_of_ending >= ?",
+          responses[0],
+          responses[0]).map(&:user_id)
       excusal = excusal.uniq
       word.append(Standup_Check.where(date_of_stand: responses[0],
                                       team: team.team_id,
@@ -52,23 +57,32 @@ SlackRubyBotServer::Events.configure do |config|
       1.upto 2 do |i|
         word[i] = word[i] - word[3]
       end
+
       word.append excusal
       if responses[1].empty?
         word.each_with_index do |w, index|
           list_users_private(
-            type_of_text: index, slack_client: slack_client,
-            command_channel: channel_id, command_user: user_id,
-            content_attachment: attachment_content(hashmap: hashmap,
-                                                   users: w),
-            date: responses[0]) unless w.empty?
+            type_of_text: index,
+            slack_client: slack_client,
+            command_channel: channel_id,
+            command_user: user_id,
+            date: responses[0],
+            content_attachment:
+              attachment_content(
+                hashmap: hashmap,
+                users: w ) ) unless w.empty?
         end
       else
         word.each_with_index do |w, index|
           list_users_public(
-            type_of_text: index, slack_client: slack_client,
-            command_channel: channel_id, date: responses[0],
+            type_of_text: index,
+            slack_client: slack_client,
+            command_channel: channel_id,
+            date: responses[0],
             content_attachment:
-              attachment_content(hashmap: hashmap, users: w)) unless w.empty?
+              attachment_content(
+                hashmap: hashmap,
+                users: w ) ) unless w.empty?
         end
       end
     end

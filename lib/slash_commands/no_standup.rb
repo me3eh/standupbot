@@ -29,11 +29,11 @@ SlackRubyBotServer::Events.configure do |config|
             "type": "button",
             "style": "danger",
             "value": "delete",
-      },
+          },
           {
             "name": "game",
             "text": "Wylistuj zwolnienia",
-            "style": "danger",
+            "type": "button",
             "value": "list",
           },
         ]
