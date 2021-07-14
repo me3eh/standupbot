@@ -1,10 +1,14 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :action, 'block_actions', 'actionId-1' do |action|
+    include Keeper_post_standup
     action_payload = action[:payload]
     arguments_from_form = action_payload[:state][:values]
-    action_team = action_payload[:user][:team_id]
+    team_id = action_payload[:user][:team_id]
     user_id = action_payload[:user][:id]
     channel_id = action_payload[:container][:channel_id]
+    slack_client = $everything_needed.get_slack_client(team_id: team_id)
+    name, pic = $everything_needed.get_info_about_user(team_id: team_id,
+                                                       user_id: user_id)
 
     Faraday.post(action_payload[:response_url], {
       text: "Dzięki za przeslanie",
@@ -18,25 +22,19 @@ SlackRubyBotServer::Events.configure do |config|
         u[1][:input][:value]
     end
 
-    team = Team.find_by(team_id: action_team) ||
-      raise("Cannot find team with ID #{action_team}.")
-
-    slack_client = Slack::Web::Client.new(token: team.token)
-    pic = slack_client.users_info(user: user_id)[:user][:profile][:image_192]
-
-    ts_message = post_public_evening(
+    ts_message = Keeper_post_standup.post_public_evening(
       slack_client: slack_client,
       command_channel: channel_id,
-      name_of_user: slack_client.users_info(user: user_id)[:user][:profile][:real_name],
+      name_of_user: name,
       word: responds, pic: pic)[:ts]
 
     date_now = Date.today
     standup = Standup_Check.find_by(user_id: user_id,
                                     date_of_stand: date_now,
-                                    team: team.team_id)
+                                    team: team_id)
     if standup.nil?
       Standup_Check.create(
-        team: team.team_id,
+        team: team_id,
         user_id: user_id,
         evening_stand: true,
         date_of_stand: date_now,

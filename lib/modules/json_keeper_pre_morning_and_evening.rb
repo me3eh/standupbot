@@ -1,5 +1,5 @@
-module Keeper
-  def Keeper.get_json_morning
+module Keeper_pre_standup
+  def Keeper_pre_standup.get_json_morning
     [
       {
         "type": "header",
@@ -146,7 +146,7 @@ module Keeper
     ]
   end
 
-  def Keeper.get_json_evening
+  def Keeper_pre_standup.get_json_evening
     [
       {
         "type": "header",
@@ -266,7 +266,7 @@ module Keeper
     ]
   end
 
-  def get_initial_check_box__morning
+  def Keeper_pre_standup.get_initial_check_box__morning
     {
       "initial_options" =>
         [
@@ -283,5 +283,25 @@ module Keeper
           }
         ],
     }
+  end
+
+  def Keeper_pre_standup.get_initial_radio_button(is_stationary:)
+    text, value = get_place_of_working(is_stationary: is_stationary)
+    {
+      "initial_option" => {
+        "text": {
+          "type": "plain_text",
+          "text": text,
+          "emoji": true
+        },
+        "value": value
+      }
+    }
+  end
+
+  def get_place_of_working(is_stationary:)
+    is_stationary.equal?(1) ?
+      %w[Stacjonarnie stationary] :
+      %w[Zdalnie remotely]
   end
 end

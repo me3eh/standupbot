@@ -4,7 +4,6 @@ class Everything_Needed
     @info_about_user = {}
     @users_in_channel = {}
     @collection_of_nonbot_users = {}
-    # @list_users = []
     Team.all.each do |team|
       slack_client = Slack::Web::Client.new( token: team.token )
       @list_slack_clients = @list_slack_clients.merge(
@@ -26,16 +25,17 @@ class Everything_Needed
         user: user_id)[:user][:profile]
       @info_about_user = @info_about_user.merge(
         {
-          user_id =>
-            {
-            "real_name" => profile_info[:real_name],
-            "pic" => profile_info[:image_192]
+          team_id => {
+            user_id => {
+                "real_name" => profile_info[:real_name],
+                "pic" => profile_info[:image_192]
             }
+          }
         }
       )
     end
-    [ @info_about_user[team_id][user_id][:real_name],
-      @info_about_user[team_id][user_id][:pic] ]
+    [ @info_about_user[team_id][user_id]["real_name"],
+      @info_about_user[team_id][user_id]["pic"] ]
   end
 
   def get_list_members_in_channel(team_id:, channel_id:)
@@ -61,7 +61,8 @@ class Everything_Needed
   def change_info_about_user(user_id:, real_name:, pic:, team_id:)
     statement = @info_about_user[team_id]&.has_key?(user_id)
     if !statement
-        @info_about_user = @info_about_user.merge({
+        @info_about_user = @info_about_user.merge(
+          {
           team_id => {
             user_id => {
               "real_name" => real_name,
@@ -70,8 +71,8 @@ class Everything_Needed
           }
         })
     else
-      @info_about_user[team_id][user_id][:real_name] = real_name
-      @info_about_user[team_id][user_id][:pic] = pic
+      @info_about_user[team_id][user_id]["real_name"] = real_name
+      @info_about_user[team_id][user_id]["pic"] = pic
     end
     @info_about_user[team_id][user_id]
   end
