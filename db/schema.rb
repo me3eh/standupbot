@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_09_123202) do
+ActiveRecord::Schema.define(version: 2021_07_14_101314) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,17 @@ ActiveRecord::Schema.define(version: 2021_07_09_123202) do
     t.string "channel_of_message_morning"
     t.string "ts_of_message_evening"
     t.string "channel_of_message_evening"
+    t.text "morning_first"
+    t.text "morning_second"
+    t.text "morning_third"
+    t.text "morning_fourth"
+    t.text "evening_first"
+    t.text "evening_second"
+    t.text "evening_third"
+    t.text "evening_fourth"
+    t.text "PRs_and_estimation"
+    t.boolean "open_for_pp"
+    t.integer "is_stationary", limit: 2
   end
 
   create_table "teams", force: :cascade do |t|
