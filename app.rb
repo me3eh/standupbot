@@ -14,6 +14,8 @@ require_relative 'lib/models'
 require_relative 'lib/events'
 require_relative 'lib/slash_commands'
 require_relative 'lib/actions'
+require_relative 'lib/additional_modules'
+
 require 'yaml'
 require 'erb'
 

@@ -6,6 +6,7 @@ SlackRubyBotServer::Events.configure do |config|
     team = Team.find_by(team_id: action_payload[:user][:team_id]) ||
       raise("Cannot find team with ID #{action_payload[:user][:team_id]}.")
     slack_client = Slack::Web::Client.new(token: team.token)
+    team_id = team.team_id
     Faraday.post(action_payload[:response_url], {
       text: 'Dzięki za przeslanie',
     }.to_json, 'Content-Type' => 'application/json')
@@ -13,10 +14,12 @@ SlackRubyBotServer::Events.configure do |config|
     hashmap = {}
     users_in_channel = []
     slack_client.conversations_members(
-      channel: channel_id)[:members].each do |u|
+      channel: channel_id
+    )[:members].each do |u|
       info_about = slack_client.users_info(user: u)[:user]
       hashmap = hashmap.merge({u => info_about[:profile][:real_name]})
-      users_in_channel.append(u) unless info_about[:is_bot]
+      users_in_channel.append(u) unless $everything_needed.is_bot(user_id: u,
+                                                                  team_id: team_id)
     end
 
     responses = Array.new(2)
@@ -40,14 +43,19 @@ SlackRubyBotServer::Events.configure do |config|
         Free_From_Standup.where(
           "date_of_beginning <= ? AND date_of_ending >= ?",
           responses[0],
-          responses[0]).map(&:user_id)
+          responses[0]
+        ).map(&:user_id)
       excusal = excusal.uniq
-      word.append(Standup_Check.where(date_of_stand: responses[0],
-                                      team: team.team_id,
-                                      morning_stand: true).map(&:user_id))
-      word.append(Standup_Check.where(date_of_stand: responses[0],
-                                      team: team.team_id,
-                                      evening_stand: true).map(&:user_id))
+      word.append(
+        Standup_Check.where(date_of_stand: responses[0],
+                            team: team_id,
+                            morning_stand: true).map(&:user_id)
+      )
+      word.append(
+        Standup_Check.where(date_of_stand: responses[0],
+                            team: team_id,
+                            evening_stand: true).map(&:user_id)
+      )
       users_in_channel = users_in_channel - excusal
       word[0] = word[0] - excusal
       word[1] = word[1] - excusal
@@ -79,10 +87,10 @@ SlackRubyBotServer::Events.configure do |config|
             slack_client: slack_client,
             command_channel: channel_id,
             date: responses[0],
-            content_attachment:
-              attachment_content(
-                hashmap: hashmap,
-                users: w ) ) unless w.empty?
+            content_attachment: attachment_content( hashmap: hashmap,
+                                                    users: w)
+          ) unless w.empty?
+          #thanks to that, there aren't showing null messages
         end
       end
     end
