@@ -99,8 +99,6 @@ module Keeper_post_standup
       ],
       )
   end
-
-
   def Keeper_post_standup.stationary_or_remotely(choice)
     choice.eql?("Stacjonarnie") ? 1 : 2
   end

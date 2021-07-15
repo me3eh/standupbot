@@ -1,13 +1,7 @@
 SlackRubyBotServer::Events.configure do |config|
-  config.on :command, '/who_doesnt_standup' do |command|
-    team = Team.find_by(team_id: command[:team_id]) ||
-      raise("Cannot find team with ID #{command[:team_id]}.")
-
-    slack_client = Slack::Web::Client.new(token: team.token)
+  config.on :command, '/who_doesnt_standup' do
     today_now = Date.today
-    slack_client.chat_postEphemeral(
-      channel: command[:channel_id],
-      user: command[:user_id],
+    {
       "blocks": [
         {
           "type": "section",
@@ -64,7 +58,7 @@ SlackRubyBotServer::Events.configure do |config|
           ]
         }
       ],
-      )
-    {text: ":slow_parrot: :fast_parrot: Ktoś w końcu uruchomił tę komendę :ultra_fast_parot: :light_fast_parrot:"}
+    }
+    # {text: ":slow_parrot: :fast_parrot: Ktoś w końcu uruchomił tę komendę :ultra_fast_parot: :light_fast_parrot:"}
   end
 end

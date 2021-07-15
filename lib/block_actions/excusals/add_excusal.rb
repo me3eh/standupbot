@@ -10,8 +10,7 @@ SlackRubyBotServer::Events.configure do |config|
         if index.equal?(2)
           response.append variables[1][:selected_user]
         else
-          response.append truth ?
-                            variables[1][:selected_date] :
+          response.append truth ? variables[1][:selected_date] :
                             variables[1][:value]
           truth = !truth unless index.equal?(0)
         end

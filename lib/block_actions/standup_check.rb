@@ -1,27 +1,16 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :action, 'block_actions', 'actionId-2' do |action1|
+
     action_payload = action1[:payload]
-    channel_id = action_payload[:container][:channel_id]
-    user_id = action_payload[:user][:id]
-    team = Team.find_by(team_id: action_payload[:user][:team_id]) ||
-      raise("Cannot find team with ID #{action_payload[:user][:team_id]}.")
-    slack_client = Slack::Web::Client.new(token: team.token)
-    team_id = team.team_id
     Faraday.post(action_payload[:response_url], {
       text: 'Dzięki za przeslanie',
     }.to_json, 'Content-Type' => 'application/json')
     { ok: true }
-    hashmap = {}
-    users_in_channel = []
-    slack_client.conversations_members(
-      channel: channel_id
-    )[:members].each do |u|
-      info_about = slack_client.users_info(user: u)[:user]
-      hashmap = hashmap.merge({u => info_about[:profile][:real_name]})
-      users_in_channel.append(u) unless $everything_needed.is_bot(user_id: u,
-                                                                  team_id: team_id)
-    end
-
+    channel_id = action_payload[:container][:channel_id]
+    user_id = action_payload[:user][:id]
+    team_id = action_payload[:user][:team_id]
+    slack_client = $everything_needed.get_slack_client(team_id: team_id)
+    users_in_channel = $everything_needed.get_list_members_in_channel(team_id: team_id, channel_id: channel_id)
     responses = Array.new(2)
     action_payload[:state][:values].each_with_index do |u, index|
       if index.equal?(0)
@@ -32,13 +21,12 @@ SlackRubyBotServer::Events.configure do |config|
     end
     birth_day_of_bot = Date.new(2021, 7, 5)
     date_today = Date.today
-    if responses[0] > Date.today || responses[0] < birth_day_of_bot
+    if responses[0] > date_today || responses[0] < birth_day_of_bot
       incorrect_data(slack_client: slack_client, channel_id: channel_id,
                      command_user: user_id, date: responses[0],
                      birth_date_of_bot: birth_day_of_bot, today: date_today)
     else
       word = []
-
       excusal =
         Free_From_Standup.where(
           "date_of_beginning <= ? AND date_of_ending >= ?",
@@ -77,7 +65,7 @@ SlackRubyBotServer::Events.configure do |config|
             date: responses[0],
             content_attachment:
               attachment_content(
-                hashmap: hashmap,
+                team_id: team_id,
                 users: w ) ) unless w.empty?
         end
       else
@@ -87,7 +75,7 @@ SlackRubyBotServer::Events.configure do |config|
             slack_client: slack_client,
             command_channel: channel_id,
             date: responses[0],
-            content_attachment: attachment_content( hashmap: hashmap,
+            content_attachment: attachment_content( team_id: team_id,
                                                     users: w)
           ) unless w.empty?
           #thanks to that, there aren't showing null messages

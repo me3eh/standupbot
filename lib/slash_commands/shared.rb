@@ -142,10 +142,12 @@ def list_users_public(type_of_text:, slack_client:,
     )
 end
 
-def attachment_content(hashmap:, users:)
+# def attachment_content(hashmap:, users:, team_id:)
+def attachment_content(users:, team_id:)
   word = ""
   users.each do |u|
-    word += "#{hashmap[u]}\n\n"
+    # word += "#{hashmap[u]}\n\n"
+    word += "#{$everything_needed.get_info_about_user(team_id: team_id,user_id: u)[0]}\n\n"
   end
   word
 end
