@@ -110,7 +110,7 @@ module Keeper_excusals
   end
 
   def Keeper_excusals.delete_option__block
-    # must create it before json
+    # must create p(hashmap) before json
     p = delete_selection
 
     {
@@ -160,32 +160,37 @@ module Keeper_excusals
     array_storing
   end
 
-  def Keeper_excusals.list_block(team_id:)
+  def Keeper_excusals.list_block(team_id:, page:)
     json_blocks = []
 
     1.upto(2) do
       json_blocks.append(add_json_divider)
     end
-
-    Free_From_Standup.all.each do |u|
-      name, pic = $everything_needed.get_info_about_user(team_id: team_id, user_id: u.user_id)
-      json_blocks.append(add_json_blocks(id_of_excusal: u.id,
-                                         beginning_date_of_excusal: u.date_of_beginning,
-                                         ending_date_of_excusal: u.date_of_ending,
-                                         name: name,
-                                         pic: pic,
-                                         excusal: u.reason))
-      json_blocks.append(add_json_divider)
+    helper = Free_From_Standup.all.order('created_at DESC')
+    excusals = helper[ ( page * $iteration )..(( page * $iteration + $iteration - 1 ))]
+    puts excusals
+    if excusals.nil?
+      {
+        text: "Brak rekordów"
+      }
+    else
+      excusals.each do |u|
+        name, pic = $everything_needed.get_info_about_user(team_id: team_id,
+                                                           user_id: u.user_id)
+        json_blocks.append(add_json_blocks(id_of_excusal: u.id,
+                                           beginning_date_of_excusal: u.date_of_beginning,
+                                           ending_date_of_excusal: u.date_of_ending,
+                                           name: name,
+                                           pic: pic,
+                                           excusal: u.reason))
+        json_blocks.append( add_json_divider)
+      end
+      {
+        text: "its not gonna show up",
+        blocks: json_blocks,
+        attachments: direction_buttons(type_of_command: 'list', recent_value: page),
+      }
     end
-
-    1.upto(2) do
-      json_blocks.append(add_json_divider)
-    end
-
-    {
-      text: "its not gonna show up",
-      blocks: json_blocks,
-    }
   end
 
   def add_json_blocks(id_of_excusal:, beginning_date_of_excusal:,
@@ -218,5 +223,76 @@ module Keeper_excusals
       "type": "divider"
     }
   end
+  
+  def values_for_buttons(type_of_command:, recent_value:)
+    left = 0
+    right = 0
+    left_caption = ''
+    right_caption = ''
+    case type_of_command
+    when "list"
+      maximal_iteration = Free_From_Standup.all.count
+      right =
+        ( maximal_iteration <= ( recent_value + 1 ) * $iteration ) ?
+                0 : recent_value + 1
+      right_caption = "Następny"
+      left = ( recent_value - 1 < 0 ) ?
+               ( maximal_iteration / $iteration ) :
+               ( recent_value - 1 )
+      left_caption = "Poprzedni"
+    when "help"
+      little_organization = [ ["commands", "morning_stand", "evening_stand"],
+        {"commands" => 0, "morning_stand" => 1, "evening_stand" => 2 },
+        {"commands" => "komendy", "morning_stand" => "pytania do poranka",
+         "evening_stand" => "pytania do wieczoru"}]
 
+      left =
+        little_organization[0][
+          ( ( little_organization[1][recent_value] - 1 ) + 3 ) % 3 ]
+      right =
+        little_organization[0][
+          ( little_organization[1][recent_value] + 1 ) % 3 ]
+
+      left_caption = little_organization[2][left]
+      right_caption = little_organization[2][right]
+
+    end
+    [left, right, left_caption, right_caption]
+  end 
+
+  def direction_buttons(type_of_command:, recent_value:)
+    callback = type_of_command.eql?('list') ?
+                 'choice_for_excusal' :
+                 'help'
+    left_value,
+    right_value,
+    left_caption,
+    right_caption =
+      values_for_buttons(type_of_command: type_of_command,
+                         recent_value: recent_value)
+    puts right_caption
+    puts left_caption
+    [
+      {
+        "fallback": "Something wrong happened. GIVE BACK WORKING BOT",
+        "callback_id": callback,
+        "color": "#3AA3E3",
+        "attachment_type": "default",
+        "actions": [
+          {
+            "name": "choice",
+            "text": left_caption,
+            "type": "button",
+            "value": "#{type_of_command}-#{left_value}",
+          },
+          {
+            "name": "game",
+            "text": right_caption,
+            "type": "button",
+            "value": "#{type_of_command}-#{right_value}",
+          }
+        ]
+      }
+    ]
+  end
 end

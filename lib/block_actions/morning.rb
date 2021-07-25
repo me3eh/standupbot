@@ -20,9 +20,11 @@ SlackRubyBotServer::Events.configure do |config|
     arguments_from_form.each.with_index do |u, index|
       if !index.eql?(arguments_from_form.size - 2) &&
         !index.eql?(arguments_from_form.size - 1)
-          responds.append u[1][:input][:value].nil? ?
-          ":speak_no_evil:" :
-          u[1][:input][:value]
+          responds.append u[1][:input].nil? ?
+            ":speak_no_evil:" :
+            u[1][:input][:value].nil? ?
+              ":speak_no_evil:" :
+              u[1][:input][:value]
       elsif index.eql?(arguments_from_form.size - 2)
         responds.append(u[1][:actionblank][:selected_options].empty? ?
           false : true)
@@ -34,7 +36,7 @@ SlackRubyBotServer::Events.configure do |config|
     end
 
     ts_message =
-      Keeper_post_standup.post_public_morning(
+      post_public_morning(
         slack_client: slack_client,
         command_channel: channel_id,
         name_of_user: name,
@@ -45,8 +47,9 @@ SlackRubyBotServer::Events.configure do |config|
     standup = Standup_Check.find_by(user_id: user_id,
                                     date_of_stand: date_now,
                                     team: team_id)
-    stationary = responds[5].eql?("Idk, gdzieś w przestrzeni kosmicznej") ?
-                   0 : Keeper_post_standup.stationary_or_remotely(responds[5])
+    stationary = 
+      responds[5].eql?("Idk, gdzieś w przestrzeni kosmicznej") ?
+        0 : Keeper_post_standup.stationary_or_remotely(responds[5])
 
 
     if standup.nil?

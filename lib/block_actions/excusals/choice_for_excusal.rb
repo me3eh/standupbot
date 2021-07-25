@@ -11,7 +11,7 @@ SlackRubyBotServer::Events.configure do |config|
     when "delete"
       Keeper_excusals.delete_option__block
     when "list"
-      Keeper_excusals.list_block(team_id: team_id)
+      Keeper_excusals.list_block(team_id: team_id, page: choice[1].to_i)
     else
       {text: "idk, coś się stało"}
     end

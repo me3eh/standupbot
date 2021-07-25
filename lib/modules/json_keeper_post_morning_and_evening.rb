@@ -10,7 +10,7 @@ module Keeper_post_standup
     "3. Pojawiły się jakieś blockery?\n\n"+
     "4. Czego nowego się dziś nauczyłeś / dowiedziałeś ? A jeśli niczego "+
     "to czego w danym temacie chciałbyś się dowiedzieć ? Daj nam sobie pomóc\n"
-  def Keeper_post_standup.post_public_morning(slack_client:,
+  def post_public_morning(slack_client:,
                           command_channel:,
                           name_of_user:,
                           word:, pic:)

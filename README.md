@@ -12,6 +12,7 @@ pewnie da sie lepiej, ale znalazłem tylko takie rozwiązanie dla ruby'ego z rak
 require 'active_record'
 class Standup_Check < ActiveRecord::Base; end
 class Team < ActiveRecord::Base; end
+db_config = YAML.load_file('config/postgresql.yml')
 Standup_Check.establish_connection(db_config['development'])
 Team.establish_connection(db_config['development'])
 Team.connection
