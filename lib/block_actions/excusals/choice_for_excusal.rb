@@ -8,8 +8,8 @@ SlackRubyBotServer::Events.configure do |config|
     case choice[0]
     when "add"
       Keeper_excusals.add_option__block(today_now: Date.today, user_id: user_id)
-    when "delete"
-      Keeper_excusals.delete_option__block
+    # when "delete"
+    #   Keeper_excusals.delete_option__block
     when "list"
       Keeper_excusals.list_block(team_id: team_id, page: choice[1].to_i)
     else

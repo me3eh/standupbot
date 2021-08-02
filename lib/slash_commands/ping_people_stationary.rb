@@ -1,5 +1,5 @@
 SlackRubyBotServer::Events.configure do |config|
-  config.on :command, '/ping_present' do |command|
+  config.on :command, '/ping_people_stationary' do |command|
     include Keeper_excusals
     team_id = command[:team_id]
     all_members_in_channel = $everything_needed.get_list_members_in_channel(team_id: team_id,

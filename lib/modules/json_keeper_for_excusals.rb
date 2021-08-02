@@ -16,14 +16,7 @@ module Keeper_excusals
           },
           {
             "name": "game",
-            "text": ":heavy_minus_sign: Usun zwolnienie",
-            "type": "button",
-            "style": "danger",
-            "value": "delete-0",
-          },
-          {
-            "name": "game",
-            "text": "Wylistuj zwolnienia",
+            "text": "Zarządzaj zwolnieniami",
             "type": "button",
             "value": "list-0",
           },
@@ -117,7 +110,7 @@ module Keeper_excusals
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "Wybierz zwolnienie z tabeli"
+        "text": "Wybierz zwolnienie z tabeli (do usunięcia)"
       },
       "accessory": {
         "type": "static_select",
@@ -171,8 +164,10 @@ module Keeper_excusals
     end
 
     excusals.each do |u|
+      puts "user =>>> #{u.user_id} =>> #{u.date_of_beginning}"
       name, pic = $everything_needed.get_info_about_user(team_id: team_id,
                                                          user_id: u.user_id)
+      puts name, pic
       json_blocks.append(add_json_blocks(id_of_excusal: u.id,
                                          beginning_date_of_excusal: u.date_of_beginning,
                                          ending_date_of_excusal: u.date_of_ending,
@@ -180,9 +175,9 @@ module Keeper_excusals
                                          pic: pic,
                                          excusal: u.reason))
       json_blocks.append( add_json_divider)
-      delete_option__block(excusals).each do |u|
-        json_blocks.append( u)
-      end
+    end
+    delete_option__block(excusals).each do |u|
+      json_blocks.append(u)
     end
     {
       text: "its not gonna show up",

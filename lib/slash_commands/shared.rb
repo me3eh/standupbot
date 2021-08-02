@@ -1,4 +1,4 @@
- $iteration = 2
+ $iteration = 10
 
 def post_public_evening(slack_client:,
                command_channel:,

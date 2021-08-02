@@ -14,8 +14,11 @@ SlackRubyBotServer::Events.configure do |config|
         "Użycie: wpisujesz /who_doesnt_standup => wciskasz enter => uzupełniasz formularz => zatwierdzasz formularz"
 
     help = "*/help*\nP-patrzysz na to teraz :point_right::point_left:"
-    no_standup = "*/no_standup - do wyboru do koloru - dodawanie, listowanie oraz usuwanie zwolnień\n"+
-      "Użycie: wpisujesz /who_doesnt_standup => wciskasz enter => uzupełniasz formularz => zatwierdzasz formularz"
+    no_standup = "*/excusal*\n - do wyboru do koloru - dodawanie, listowanie oraz usuwanie zwolnień\n"+
+      "Użycie: wpisujesz /excusal => wciskasz enter => uzupełniasz formularz => zatwierdzasz formularz"
+    ping_stationary ="*/ping_people_stationary*\n - spinguj ludzie będących w pracy (przydatne przy obiadkach (bierze ludzi, którzy zazmaczyli stacjonarnie oraz nie zrobili standupu)\n"+
+      "Użycie: wpisujesz /ping_people_stationary => wciskasz enter => patrzysz kto jest i możesz spingować"
+
     action_payload = action[:payload]
     choice = action_payload[:actions][0][:value].split('-')[1]
     include Keeper_post_standup
@@ -67,6 +70,13 @@ SlackRubyBotServer::Events.configure do |config|
             "text": {
               "type": "mrkdwn",
               "text": no_standup
+            }
+          },
+          {
+            "type": "section",
+            "text": {
+              "type": "mrkdwn",
+              "text": ping_stationary
             }
           },
           {
