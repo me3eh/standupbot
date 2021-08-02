@@ -24,7 +24,7 @@ SlackRubyBotServer::Events.configure do |config|
       list_users_private(
         type_of_text: number_of_selection,
         response_url: action_payload[:response_url],
-        date: value_option[2],
+        date: value_option[1],
         counts: count_of_standup_and_users_in_them,
         content_attachment:
           attachment_content(
