@@ -1,4 +1,5 @@
 class Everything_Needed
+  attr_accessor :array_of_members
   def initialize
     @list_slack_clients = {}
     @info_about_user = {}
@@ -52,6 +53,45 @@ class Everything_Needed
       )
     end
     @list_slack_clients[team_id]
+  end
+
+  def get_number_of_standups(date_required:, team_id:, channel_id:)
+    users_in_channel = get_list_members_in_channel(team_id: team_id,
+                                                   channel_id: channel_id)
+    excusal =
+      Free_From_Standup.where(
+        "date_of_beginning <= ? AND date_of_ending >= ?",
+        date_required,
+        date_required
+      ).pluck(:user_id)
+    excusal = excusal.uniq
+
+    both_standups =
+      Standup_Check.where(date_of_stand: date_required,
+                          team: team_id,
+                          morning_stand: true,
+                          evening_stand: true).pluck(:user_id)
+    morning_standups =
+      Standup_Check.where(date_of_stand: date_required,
+                          team: team_id,
+                          morning_stand: true).pluck(:user_id) - both_standups - excusal
+    evening_standups =
+      Standup_Check.where(date_of_stand: date_required,
+                          team: team_id,
+                          evening_stand: true).pluck(:user_id) - both_standups - excusal
+    both_standups = both_standups - excusal
+    no_standup =
+      users_in_channel - morning_standups - evening_standups - both_standups - excusal
+    return [no_standup.count,
+            morning_standups.count,
+            evening_standups.count,
+            both_standups.count,
+            excusal.count,
+            no_standup,
+            morning_standups,
+            evening_standups,
+            both_standups,
+            excusal]
   end
 
   def get_info_about_user(team_id:, user_id:)

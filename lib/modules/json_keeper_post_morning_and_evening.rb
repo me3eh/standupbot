@@ -44,15 +44,34 @@ module Keeper_post_standup
       ],
 
       "attachments": [
-        {
-          "text": "1. #{word[0]}\n\n"+
-            "2. #{word[1]}\n\n"+
-            "3. #{word[2]}\n\n"+
-            "4. #{word[3]}"+
-            "#{place}#{open_for_pp}",
-          "color": "#00ff00",
-        }
+        fields:[
+          {
+            "title": "1. Zadania na dziś",
+            "value": word[0],
+            "short": false
+          },
+          {
+            "title": "2. Blockery",
+            "value": word[1],
+            "short": false
+          },
+          {
+            "title": "3. Pomoc?",
+            "value": word[2],
+            "short": false
+          },
+          {
+            "title": "4. Kompan do pomocy?",
+            "value": word[3],
+            "short": false
+          },
+        ],
+        footer: " #{place} #{open_for_pp}",
+        color: "#bfff00",
       ],
+      as_user: true,
+      # username: "slkd",
+      # icon_url: "http://lorempixel.com/48/48"
       )
   end
 
@@ -88,14 +107,34 @@ module Keeper_post_standup
       ],
 
       "attachments": [
-        {
-          "text": "1. #{word[0]}\n\n"+
-            "2. #{word[1]}\n\n"+
-            "3. #{word[2]}\n\n"+
-            "4. #{word[3]}\n\n\n"+
-            "*PRy/Tickety i ich estymacje:*\n\n #{word[4]}",
-          "color": "#00ff00",
-        }
+        fields:[
+          {
+            "title": "1. Co ukończone?",
+            "value": word[0],
+            "short": false
+          },
+          {
+            "title": "2. Co nieukończone?",
+            "value": word[1],
+            "short": false
+          },
+          {
+            "title": "3. Blockery podczas dnia",
+            "value": word[2],
+            "short": false
+          },
+          {
+            "title": "4. Jakie wnioski?",
+            "value": word[3],
+            "short": false
+          },
+          {
+            "title": "PR'ki, tickeciki itd.",
+            "value": word[4],
+            "short": false
+          },
+        ],
+        color: "#1B4D3E",
       ],
       )
   end

@@ -1,54 +1,10 @@
  $iteration = 2
-# def post_public_morning(slack_client:,
-#                 command_channel:,
-#                 name_of_user:,
-#                 word:, pic:)
-#   open_for_pp = word[4] ? "\t*#Open for PP*" : " "
-#   place = "\n\n\n*##{word[5]}*"
-#   slack_client.chat_postMessage(
-#     channel: command_channel,
-#     "blocks": [
-#       {
-#         "type": "header",
-#         "text": {
-#           "type": "plain_text",
-#           "text": "Standup poranny: "+
-#             "#{name_of_user}",
-#           "emoji": true
-#         }
-#       },
-#       {
-#         "type": "section",
-#         "block_id": "section567",
-#         "text": {
-#           "type": "mrkdwn",
-#           "text": MORNING_NOTIFICATION
-#         },
-#         "accessory": {
-#           "type": "image",
-#           "image_url": "#{pic}",
-#           "alt_text": "Profile_picture"
-#         }
-#       },
-#     ],
-#
-#     "attachments": [
-#       {
-#         "text": "1. #{word[0]}\n\n"+
-#           "2. #{word[1]}\n\n"+
-#           "3. #{word[2]}\n\n"+
-#           "4. #{word[3]}"+
-#           "#{place}#{open_for_pp}",
-#         "color": "#00ff00",
-#       }
-#     ],
-#   )
-# end
 
 def post_public_evening(slack_client:,
                command_channel:,
                name_of_user:,
                word:, pic:)
+
   slack_client.chat_postMessage(
   channel: command_channel,
   "blocks": [
@@ -56,8 +12,7 @@ def post_public_evening(slack_client:,
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "Standup wieczorny: "+
-          "#{name_of_user}",
+        "text": "Standup wieczorny: #{name_of_user}",
         "emoji": true
       }
     },
@@ -90,36 +45,92 @@ def post_public_evening(slack_client:,
 end
 
 def list_users_private(type_of_text:,
-                       slack_client:,
-                       command_channel:,
-                       command_user:,
-                       content_attachment:, date:)
+                       content_attachment:,
+                       date:,
+                       response_url:,
+                       counts:,
+                       first:)
   text_for_header = type_of_header(type_of_text)
   color_for_attachment = type_of_color(type_of_text)
-  slack_client.chat_postEphemeral(
-    channel: command_channel,
-    user: command_user,
-    "blocks": [
-      {
-        "type": "header",
-        "text": {
-          "type": "plain_text",
-          "text": "#{text_for_header} w dniu #{date}",
-          "emoji": true
-        }
-      }
-    ],
-    "attachments": [
-      {
-        "text": "#{content_attachment}",
-        "color": "#{color_for_attachment}",
-      }
-    ],
-  )
+  message = message_creation(text_for_header: text_for_header,
+                             color_for_attachment: color_for_attachment,
+                             date: date,
+                             counts:counts,
+                             content_attachment: content_attachment)
+  if first
+    Faraday.post(response_url, message
+  .to_json, 'Content-Type' => 'application/json')
+  else
+    message
+  end
 end
 
-def list_users_public(type_of_text:, slack_client:,
-                      command_channel:, content_attachment:, date:)
+ def message_creation(text_for_header:,
+                      date:,
+                      content_attachment:,
+                      color_for_attachment:,
+                      counts:)
+   {
+     "text": "Dzięki za przeslanie",
+     "blocks": [
+       {
+         "type": "header",
+         "text": {
+           "type": "plain_text",
+           "text": "#{text_for_header} w dniu #{date}",
+           "emoji": true
+         }
+       }
+     ],
+     "attachments": [
+       {
+         "text": "#{content_attachment}",
+         "color": "#{color_for_attachment}",
+         "fallback": "Something wrong happened. GIVE BACK WORKING BOT",
+         "callback_id": "who_doesnt_standup",
+         "attachment_type": "default",
+         "actions": [
+           {
+             "name": "nothing",
+             "text": "Brak standupu(#{counts[0]})",
+             "type": "button",
+             "value": "nothing/#{date}",
+           },
+           {
+             "name": "only_morning",
+             "text": "Poranne standupy(#{counts[1]})",
+             "type": "button",
+             "value": "only_morning/#{date}",
+           },
+           {
+             "name": "only_evening",
+             "text": "Wieczorne standupy(#{counts[2]})",
+             "type": "button",
+             "value": "only_evening/#{date}",
+           },
+           {
+             "name": "both",
+             "text": "Oba standupy(#{counts[3]})",
+             "type": "button",
+             "value": "both/#{date}",
+           },
+           {
+             "name": "excusal",
+             "text": "Zwolnienia(#{counts[4]})",
+             "type": "button",
+             "value": "excusal/#{date}",
+             "style": "danger",
+           },
+         ]
+       }
+     ]
+   }
+ end
+def list_users_public(type_of_text:,
+                      slack_client:,
+                      command_channel:,
+                      content_attachment:,
+                      date:)
   text_for_header = type_of_header(type_of_text)
   color_for_attachment = type_of_color(type_of_text)
   slack_client.chat_postMessage(
@@ -146,10 +157,12 @@ end
 # def attachment_content(hashmap:, users:, team_id:)
 def attachment_content(users:, team_id:)
   word = ""
+  word = "Brak" if users.empty?
   users.each do |u|
     # word += "#{hashmap[u]}\n\n"
     word += "#{$everything_needed.get_info_about_user(team_id: team_id,user_id: u)[0]}\n\n"
   end
+  word = "#{word}\n\n\n\n"
   word
 end
 

@@ -300,6 +300,9 @@ module Keeper_pre_standup
   end
 
   def get_place_of_working(is_stationary:)
+    # if stationary is selected, then is_stationary == 1
+    # else if remomtely is selected, then is_stationary == 2
+    # else is_stationary == 0
     is_stationary.equal?(1) ?
       %w[Stacjonarnie stationary] :
       %w[Zdalnie remotely]

@@ -18,7 +18,6 @@ SlackRubyBotServer::Events.configure do |config|
       "Użycie: wpisujesz /who_doesnt_standup => wciskasz enter => uzupełniasz formularz => zatwierdzasz formularz"
     action_payload = action[:payload]
     choice = action_payload[:actions][0][:value].split('-')[1]
-    puts action_payload
     include Keeper_post_standup
     include Keeper_excusals
     case choice

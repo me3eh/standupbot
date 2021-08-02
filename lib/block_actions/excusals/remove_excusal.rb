@@ -5,7 +5,7 @@ SlackRubyBotServer::Events.configure do |config|
     arguments_from_form = action_payload[:state][:values]
     choice = ''
     arguments_from_form.each do |arg|
-      choice = arg[1][:static_select][:selected_option][:value]
+      choice = arg[1][:static_select][:selected_option].nil? ? nil : arg[1][:static_select][:selected_option][:value]
       choice = choice.nil? ? -1 : choice
     end
     if choice == -1

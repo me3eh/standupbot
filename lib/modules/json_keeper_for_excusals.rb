@@ -109,52 +109,50 @@ module Keeper_excusals
     }
   end
 
-  def Keeper_excusals.delete_option__block
+  def delete_option__block(array_containing_excusals)
     # must create p(hashmap) before json
-    p = delete_selection
-
-    {
-      text:"Not gonna show",
-      blocks: [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "Wybierz zwolnienie z tabeli"
-          },
-          "accessory": {
-            "type": "static_select",
-            "placeholder": {
-              "type": "plain_text",
-              "text": "Select an item",
-              "emoji": true
-            },
-            "options": p,
-            "action_id": "static_select"
-          }
+    p = delete_selection(array_containing_excusals)
+    [
+      {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Wybierz zwolnienie z tabeli"
+      },
+      "accessory": {
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select an item",
+          "emoji": true
         },
-        {
-          "type": "actions",
-          "elements": [
-            {
-              "type": "button",
-              "text": {
-                "type": "plain_text",
-                "text": "Zatwierdź",
-                "emoji": true
-              },
-              "value": "click_me_123",
-              "action_id": "remove_excusal"
-            }
-          ]
+        "options": p,
+        "action_id": "static_select"
+      }
+    },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": " "
+        },
+        "accessory": {
+          "type": "button",
+          "text": {
+            "type": "plain_text",
+            "text": "Zatwierdź",
+            "emoji": true
+          },
+          "value": "click_me_123",
+          "action_id": "remove_excusal"
         }
-      ]
-    }
+      },
+  ]
   end
 
-  def delete_selection
+  def delete_selection( array_with_excusals )
     array_storing = []
-    Free_From_Standup.all.each do |u|
+    array_with_excusals.each do |u|
       array_storing.append( {'text': {'type': 'plain_text', 'text': "ID zwolnienia:#{u.id}"}, 'value': "#{u.id}"} )
     end
     array_storing
@@ -163,34 +161,34 @@ module Keeper_excusals
   def Keeper_excusals.list_block(team_id:, page:)
     json_blocks = []
 
-    1.upto(2) do
-      json_blocks.append(add_json_divider)
-    end
     helper = Free_From_Standup.all.order('created_at DESC')
     excusals = helper[ ( page * $iteration )..(( page * $iteration + $iteration - 1 ))]
-    puts excusals
-    if excusals.nil?
-      {
+
+    if excusals.empty?
+      return {
         text: "Brak rekordów"
       }
-    else
-      excusals.each do |u|
-        name, pic = $everything_needed.get_info_about_user(team_id: team_id,
-                                                           user_id: u.user_id)
-        json_blocks.append(add_json_blocks(id_of_excusal: u.id,
-                                           beginning_date_of_excusal: u.date_of_beginning,
-                                           ending_date_of_excusal: u.date_of_ending,
-                                           name: name,
-                                           pic: pic,
-                                           excusal: u.reason))
-        json_blocks.append( add_json_divider)
-      end
-      {
-        text: "its not gonna show up",
-        blocks: json_blocks,
-        attachments: direction_buttons(type_of_command: 'list', recent_value: page),
-      }
     end
+
+    excusals.each do |u|
+      name, pic = $everything_needed.get_info_about_user(team_id: team_id,
+                                                         user_id: u.user_id)
+      json_blocks.append(add_json_blocks(id_of_excusal: u.id,
+                                         beginning_date_of_excusal: u.date_of_beginning,
+                                         ending_date_of_excusal: u.date_of_ending,
+                                         name: name,
+                                         pic: pic,
+                                         excusal: u.reason))
+      json_blocks.append( add_json_divider)
+      delete_option__block(excusals).each do |u|
+        json_blocks.append( u)
+      end
+    end
+    {
+      text: "its not gonna show up",
+      blocks: json_blocks,
+      attachments: direction_buttons(type_of_command: 'list', recent_value: page),
+    }
   end
 
   def add_json_blocks(id_of_excusal:, beginning_date_of_excusal:,
@@ -270,8 +268,6 @@ module Keeper_excusals
     right_caption =
       values_for_buttons(type_of_command: type_of_command,
                          recent_value: recent_value)
-    puts right_caption
-    puts left_caption
     [
       {
         "fallback": "Something wrong happened. GIVE BACK WORKING BOT",

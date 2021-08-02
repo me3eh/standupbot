@@ -1,7 +1,9 @@
 SlackRubyBotServer::Events.configure do |config|
   config.on :command, '/who_doesnt_standup' do
     today_now = Date.today
+    ar = static_select
     {
+      "text": "idk",
       "blocks": [
         {
           "type": "section",
@@ -18,6 +20,23 @@ SlackRubyBotServer::Events.configure do |config|
               "emoji": true
             },
             "action_id": "datepicker-action"
+          }
+        },
+        {
+          "type": "input",
+          "element": {
+            "type": "static_select",
+            "placeholder": {
+              "type": "plain_text",
+              "text": "Select an item",
+              "emoji": true
+            },
+            "options": ar,
+            "action_id": "static_select_action"
+          },
+          "label": {
+            "type": "plain_text",
+            "text": "Wybierz zwolnienie od którego zacząć(prywatnie) lub które wyświetlić(publicznie)"
           }
         },
         {
@@ -53,12 +72,20 @@ SlackRubyBotServer::Events.configure do |config|
                 "emoji": true
               },
               "value": "click_me_123",
-              "action_id": "actionId-2"
+              "action_id": "who_doesnt_standup"
             }
           ]
         }
       ],
     }
-    # {text: ":slow_parrot: :fast_parrot: Ktoś w końcu uruchomił tę komendę :ultra_fast_parot: :light_fast_parrot:"}
   end
+end
+
+def static_select
+  text = %w[Brak\ zwolnienia Tylko\ poranne Tylko\ wieczorne Oba\ złożone Zwolnienia]
+  p = []
+  0.upto(4) do |u|
+    p.append({"text":{"type": 'plain_text',"text": "#{text[u]}",},"value": "#{u}",})
+  end
+  p
 end
