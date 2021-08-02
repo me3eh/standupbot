@@ -1,5 +1,5 @@
 SlackRubyBotServer::Events.configure do |config|
-  config.on :command, '/no_standup' do
+  config.on :command, '/excusal' do
     include Keeper_excusals
     {
       "text": "Wybierz swoją opcję",
