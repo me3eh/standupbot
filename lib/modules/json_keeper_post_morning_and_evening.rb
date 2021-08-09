@@ -28,21 +28,7 @@ module Keeper_post_standup
             "emoji": true
           }
         },
-        {
-          "type": "section",
-          "block_id": "section567",
-          "text": {
-            "type": "mrkdwn",
-            "text": MORNING_NOTIFICATION
-          },
-          "accessory": {
-            "type": "image",
-            "image_url": "#{pic}",
-            "alt_text": "Profile_picture"
-          }
-        },
       ],
-
       "attachments": [
         fields:[
           {
@@ -68,10 +54,9 @@ module Keeper_post_standup
         ],
         footer: " #{place} #{open_for_pp}",
         color: "#bfff00",
+        thumb_url: "#{pic}",
       ],
       as_user: true,
-      # username: "slkd",
-      # icon_url: "http://lorempixel.com/48/48"
       )
   end
 
@@ -89,19 +74,6 @@ module Keeper_post_standup
             "text": "Standup wieczorny: "+
               "#{name_of_user}",
             "emoji": true
-          }
-        },
-        {
-          "type": "section",
-          "block_id": "section567",
-          "text": {
-            "type": "mrkdwn",
-            "text": EVENING_NOTIFICATION
-          },
-          "accessory": {
-            "type": "image",
-            "image_url": "#{pic}",
-            "alt_text": "Profile_picture"
           }
         },
       ],
@@ -135,6 +107,7 @@ module Keeper_post_standup
           },
         ],
         color: "#1B4D3E",
+        thumb_url: "#{pic}",
       ],
       )
   end
