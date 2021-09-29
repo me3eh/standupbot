@@ -15,7 +15,6 @@ gem 'slack-ruby-block-kit'
 gem 'puma'
 gem 'rake'
 gem 'standalone_migrations'
-
 group :test do
   gem 'capybara'
   gem 'database_cleaner'

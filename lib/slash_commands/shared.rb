@@ -1,49 +1,5 @@
  $iteration = 10
 
-def post_public_evening(slack_client:,
-               command_channel:,
-               name_of_user:,
-               word:, pic:)
-
-  slack_client.chat_postMessage(
-  channel: command_channel,
-  "blocks": [
-    {
-      "type": "header",
-      "text": {
-        "type": "plain_text",
-        "text": "Standup wieczorny: #{name_of_user}",
-        "emoji": true
-      }
-    },
-    {
-      "type": "section",
-      "block_id": "section567",
-      "text": {
-        "type": "mrkdwn",
-        "text": EVENING_NOTIFICATION
-      },
-      "accessory": {
-        "type": "image",
-        "image_url": "#{pic}",
-        "alt_text": "Profile_picture"
-      }
-    },
-  ],
-
-  "attachments": [
-    {
-      "text": "1. #{word[0]}\n\n"+
-        "2. #{word[1]}\n\n"+
-        "3. #{word[2]}\n\n"+
-        "4. #{word[3]}\n\n\n"+
-        "*PRy/Tickety i ich estymacje:*\n\n #{word[4]}",
-      "color": "#00ff00",
-    }
-  ],
-  )
-end
-
 def list_users_private(type_of_text:,
                        content_attachment:,
                        date:,

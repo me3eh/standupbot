@@ -164,10 +164,8 @@ module Keeper_excusals
     end
 
     excusals.each do |u|
-      puts "user =>>> #{u.user_id} =>> #{u.date_of_beginning}"
       name, pic = $everything_needed.get_info_about_user(team_id: team_id,
                                                          user_id: u.user_id)
-      puts name, pic
       json_blocks.append(add_json_blocks(id_of_excusal: u.id,
                                          beginning_date_of_excusal: u.date_of_beginning,
                                          ending_date_of_excusal: u.date_of_ending,

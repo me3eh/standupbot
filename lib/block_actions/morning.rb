@@ -15,42 +15,32 @@ SlackRubyBotServer::Events.configure do |config|
       response_type: 'ephemeral'
     }.to_json, 'Content-Type' => 'application/json')
     { ok: true }
-
-    responds = []
-    arguments_from_form.each.with_index do |u, index|
-      if !index.eql?(arguments_from_form.size - 2) &&
-        !index.eql?(arguments_from_form.size - 1)
-          responds.append u[1][:input].nil? ?
-            ":speak_no_evil:" :
-            u[1][:input][:value].nil? ?
-              ":speak_no_evil:" :
-              u[1][:input][:value]
-      elsif index.eql?(arguments_from_form.size - 2)
-        responds.append(u[1][:actionblank][:selected_options].empty? ?
-          false : true)
-      else
-        responds.append(u[1][:choice][:selected_option].nil? ?
-        "Idk, gdzieś w przestrzeni kosmicznej" :
-        u[1][:choice][:selected_option][:text][:text])
-      end
-    end
-
-    ts_message =
-      post_public_morning(
-        slack_client: slack_client,
-        command_channel: channel_id,
-        name_of_user: name,
-        word: responds,
-        pic: pic)[:ts]
-
     date_now = Date.today
     standup = Standup_Check.find_by(user_id: user_id,
                                     date_of_stand: date_now,
                                     team: team_id)
-    stationary = 
-      responds[5].eql?("Idk, gdzieś w przestrzeni kosmicznej") ?
-        0 : Keeper_post_standup.stationary_or_remotely(responds[5])
+    responds = []
 
+    creating_standup = standup.nil? ? true : !standup.morning_stand
+    value_1_if_editing_existing_standup = creating_standup ? 0 : 1
+
+    gathering_responds_from_form_morning(responds: responds,
+                                 arguments_from_form: arguments_from_form,
+                                 creating_standup: creating_standup)
+
+    #responds[0] will tell in which state [edit/delete-and-create]
+    # will be the standup if there was before an existing one
+
+    if (responds[0] == 'delete-and-create' && !creating_standup) || creating_standup
+      ts_message = post_public_morning( slack_client: slack_client,
+                                      command_channel: channel_id,
+                                      name_of_user: name,
+                                      word: responds,
+                                      pic: pic,
+                                      value_1_if_editing_existing_standup: value_1_if_editing_existing_standup)[:ts]
+    end
+    stationary = responds[5 + value_1_if_editing_existing_standup].eql?("Idk, gdzieś w przestrzeni kosmicznej") ?
+                   0 : stationary_or_remotely(responds[5 + value_1_if_editing_existing_standup])
 
     if standup.nil?
       Standup_Check.create(
@@ -68,20 +58,51 @@ SlackRubyBotServer::Events.configure do |config|
         is_stationary: stationary
       )
     elsif standup.morning_stand
-      slack_client.chat_delete(
-        channel: standup.channel_of_message_morning,
-        ts: standup.ts_of_message_morning
-      )
-      standup.update(
-        ts_of_message_morning: ts_message,
-        channel_of_message_morning: channel_id,
-        morning_first: responds[0],
-        morning_second: responds[1],
-        morning_third: responds[2],
-        morning_fourth: responds[3],
-        open_for_pp: responds[4],
-        is_stationary: stationary
-      )
+      if responds[0] == 'delete-and-create'
+        slack_client.chat_delete(
+          channel: standup.channel_of_message_morning,
+          ts: standup.ts_of_message_morning
+        )
+        standup.update(
+          ts_of_message_morning: ts_message,
+          channel_of_message_morning: channel_id,
+          morning_first: responds[1],
+          morning_second: responds[2],
+          morning_third: responds[3],
+          morning_fourth: responds[4],
+          open_for_pp: responds[5],
+          is_stationary: stationary
+        )
+      else
+        edit_public_morning(slack_client: slack_client,
+                            ts: standup.ts_of_message_morning,
+                            name_of_user: name,
+                            command_channel: standup.channel_of_message_morning,
+                            word: responds,
+                            pic: pic,
+                            value_1_if_editing_existing_standup: value_1_if_editing_existing_standup)
+        # slack_client.chat_update(
+        #   channel: standup.channel_of_message_morning,
+        #   ts: standup.ts_of_message_morning,
+        #   attachments: [
+        #     {
+        #       "title": "4. Kompan do pomocy?",
+        #       "value": "dupa",
+        #       "short": false
+        #     },
+        #   ]
+        # )
+        standup.update(
+          channel_of_message_morning: channel_id,
+          morning_first: responds[1],
+          morning_second: responds[2],
+          morning_third: responds[3],
+          morning_fourth: responds[4],
+          open_for_pp: responds[5],
+          is_stationary: stationary
+        )
+      end
+
     elsif !standup.morning_stand
       standup.update(
         morning_stand: true,
