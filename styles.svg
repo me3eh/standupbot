@@ -3,79 +3,80 @@
     <div xmlns="http://www.w3.org/1999/xhtml">
       // VARIABLES
       <style>
-      $color-blauet-clar: #00E5F8;
-      $color-blauet-fosc: #0CACA6;
-      $color-rosa-clar: #FF4BA8;
-      $color-rosa-fosc: #6D0B13;
+        // VARIABLES
+        $color-blauet-clar: #00E5F8;
+        $color-blauet-fosc: #0CACA6;
+        $color-rosa-clar: #FF4BA8;
+        $color-rosa-fosc: #6D0B13;
 
-      // GENERAL
-      //@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
-      * { margin: 0; padding: 0; border-width: 0; }
+        // GENERAL
+        //@import url(https://fonts.googleapis.com/css?family=Press+Start+2P);
+        * { margin: 0; padding: 0; border-width: 0; }
 
-      // ANIMACIO
-      @keyframes desplaçament {
-      from { text-shadow: 0 0 $color-rosa-clar; }
-      to { text-shadow: .15em .15em $color-rosa-clar; }
-      }
-      @keyframes color {
-      from { color: $color-blauet-clar; }
-      to { color: $color-blauet-fosc; }
-      }
-      @keyframes rotacio {
-      from { transform: rotate(-4deg); }
-      to { transform: rotate(4deg); }
-      }
+        // ANIMACIO
+        @keyframes desplaçament {
+        from { text-shadow: 0 0 $color-rosa-clar; }
+        to { text-shadow: .15em .15em $color-rosa-clar; }
+        }
+        @keyframes color {
+        from { color: $color-blauet-clar; }
+        to { color: $color-blauet-fosc; }
+        }
+        @keyframes rotacio {
+        from { transform: rotate(-4deg); }
+        to { transform: rotate(4deg); }
+        }
 
-      // CAIXA
-      .contenidor {
-      display: flex;
-      margin-top: 20vh;
-      width: 100%;
-      background-color: #333333;
-      border-top: 5px solid white;
-      border-bottom: 5px solid white;
-      }
+        // CAIXA
+        .contenidor {
+        display: flex;
+        margin-top: 20vh;
+        width: 100%;
+        background-color: #333333;
+        border-top: 5px solid white;
+        border-bottom: 5px solid white;
+        }
 
-      // TEXT
-      span {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 5% 2%;
-      width: 65%;
-      font-size: 1em;
-      font-weight: 900;
-      text-transform: uppercase;
-      line-height: 1.0em;
-      animation-name: desplaçament, color, rotacio;
-      animation-duration: 2s, 1s, 3s;
-      animation-timing-function: ease-in, ease-out, ease-in-out;
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
-      }
+        // TEXT
+        span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 5% 2%;
+        width: 65%;
+        font-size: 1em;
+        font-weight: 900;
+        text-transform: uppercase;
+        line-height: 1.0em;
+        animation-name: desplaçament, color, rotacio;
+        animation-duration: 2s, 1s, 3s;
+        animation-timing-function: ease-in, ease-out, ease-in-out;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        }
 
-      // IMATGE
-      .imatge {
-      width: 35%;
-      background: linear-gradient($color-rosa-clar, $color-rosa-fosc);
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 25% 100%);
-      }
-      img {
-      margin: 10% 10% 10% 30%;
-      width: 60%;
-      animation-name: rotacio;
-      animation-duration: 3s;
-      animation-timing-function: ease-in-out;
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
-      }
+        // IMATGE
+        .imatge {
+        width: 35%;
+        background: linear-gradient($color-rosa-clar, $color-rosa-fosc);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 25% 100%);
+        }
+        img {
+        margin: 10% 10% 10% 30%;
+        width: 60%;
+        animation-name: rotacio;
+        animation-duration: 3s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        }
 
-      // AUDIO
-      iframe {
-      display: none;
-      width: 0;
-      height: 0;
-      }
+        // AUDIO
+        iframe {
+        display: none;
+        width: 0;
+        height: 0;
+        }
       </style>
       <div class="contenidor">
         <span>Hotline<br>Miami</span>
@@ -83,6 +84,7 @@
           <img src="http://vignette2.wikia.nocookie.net/hotline-miami/images/f/f1/Untitled-3.png/revision/latest?cb=20150310222805">
         </div>
       </div>
+      <iframe width="200" height="150" src="https://www.youtube-nocookie.com/embed/oKD-MVfC9Ag?rel=0&amp;controls=0&amp;showinfo=0;autoplay=1" frameborder="0" allowfullscreen></iframe>
     </div>
   </foreignObject>
 </svg>
