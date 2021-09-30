@@ -1,10 +1,20 @@
-<h1>Wstaniobot do slacka - WIP</h1>
+<h1 style="justify-content: center; display:grid; color:red;">Wstaniobot</h1>
 
-![](https://media.tenor.com/images/4f5ec4401107eebf42f42093ffb1472f/tenor.gif)
+<div align="center">
+	<br>	
+		<img src="styles.svg" width="800" height="400" alt="Click to see the source">
+	<br>
+</div>
 
-Rzeczy, które mogą się przydać:
+## Komendy:
+- ### morning_standup 
+- ### evening_standup 
+- ### ping_people_stationary
+- ###
+## Rzeczy, które mogą się przydać:
 
-<h3>Podpięcie bazy danych do irb</h3>
+
+<h4>Podpięcie bazy danych do irb</h4>
 
 (w moim wypadku tylko dwie klasy-
 pewnie da sie lepiej, ale znalazłem tylko takie rozwiązanie dla ruby'ego z rake'iem)
