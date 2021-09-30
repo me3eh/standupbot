@@ -2,6 +2,7 @@
   <foreignObject width="100%" height="100%">
     <div xmlns="http://www.w3.org/1999/xhtml">
       // VARIABLES
+      <style>
       $color-blauet-clar: #00E5F8;
       $color-blauet-fosc: #0CACA6;
       $color-rosa-clar: #FF4BA8;
@@ -75,6 +76,7 @@
       width: 0;
       height: 0;
       }
+      </style>
       <div class="contenidor">
         <span>Hotline<br>Miami</span>
         <div class="imatge">
