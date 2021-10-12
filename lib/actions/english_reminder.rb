@@ -1,10 +1,10 @@
 require 'date'
 instance = SlackRubyBotServer::Service.instance
-
+zone = 2
 instance.every :minute do
   today_date_and_time = DateTime.now
-  if  today_date_and_time.strftime('%A').eql?('Thursday') &&
-    today_date_and_time.hour.eql?(8) &&
+  if  today_date_and_time.strftime('%A').eql?('Friday') &&
+    today_date_and_time.hour.eql?(14-zone) &&
     today_date_and_time.minute > 58
     slack_client = $everything_needed.get_slack_client(team_id: 'T0A5H5F5M')
     # TODO change for team_id: T0A5H5F5M channel_id:CUMV4JP27
@@ -14,8 +14,8 @@ instance.every :minute do
       text: "Angielski :slow_parrot:"
     )
   end
-  if  today_date_and_time.strftime('%A').eql?('Wednesday') &&
-      today_date_and_time.hour.eql?(9) &&
+  if  today_date_and_time.strftime('%A').eql?('Thursday') &&
+      today_date_and_time.hour.eql?(11-zone) &&
       today_date_and_time.minute == 30
     slack_client = $everything_needed.get_slack_client(team_id: 'T0A5H5F5M')
     # TODO change for team_id: T0A5H5F5M channel_id:CUMV4JP27
