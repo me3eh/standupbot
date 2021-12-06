@@ -234,8 +234,8 @@ module Keeper_excusals
     when "help"
       little_organization = [ ["commands", "morning_stand", "evening_stand"],
         {"commands" => 0, "morning_stand" => 1, "evening_stand" => 2 },
-        {"commands" => "komendy", "morning_stand" => "pytania do poranka",
-         "evening_stand" => "pytania do wieczoru"}]
+        {"commands" => ":sos:komendy", "morning_stand" => ":city_sunrise:pytania do poranka",
+         "evening_stand" => ":city_sunset:pytania do wieczoru"}]
 
       left =
         little_organization[0][

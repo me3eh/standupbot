@@ -72,13 +72,13 @@ SlackRubyBotServer::Events.configure do |config|
               "text": no_standup
             }
           },
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": ping_stationary
-            }
-          },
+          # {
+          #   "type": "section",
+          #   "text": {
+          #     "type": "mrkdwn",
+          #     "text": ping_stationary
+          #   }
+          # },
           {
             "type": "section",
             "text": {

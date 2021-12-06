@@ -8,7 +8,7 @@ SlackRubyBotServer::Events.configure do |config|
     # command_channel = command[:channel_id]
     # command_user = command[:user_id]
     {
-      text: "Wybierz sobie opcje :slow_parrot:",
+      text: "Wybierz sobie opcje :flushed: :point_right::point_left:",
       attachments: [
         {
           "fallback": "Something wrong happened. GIVE BACK WORKING BOT",
