@@ -6,7 +6,7 @@ module Evening_Standup_Commands
       if !creating_standup && first_argument(index)
         responds.append( u[1][:edit_option][:selected_option][:value])
       else
-        responds.append u[1][:input][:value].nil? ? ":clown:" : u[1][:input][:value]
+        responds.append u[1][:input][:value].nil? ? ":clown_face:" : u[1][:input][:value]
       end
     end
   end
