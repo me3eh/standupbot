@@ -3,4 +3,4 @@
 require_relative 'models/team'
 require_relative 'models/Standup_Check'
 require_relative 'models/Free_From_Standup'
-require_relative 'classes/Everything_Needed'
+require_relative 'classes/everything_needed'

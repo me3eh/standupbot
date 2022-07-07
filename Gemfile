@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby "3.0.4"
 
 gem 'activerecord', require: 'active_record'
 gem 'irb'
@@ -15,6 +16,8 @@ gem 'slack-ruby-block-kit'
 gem 'puma'
 gem 'rake'
 gem 'standalone_migrations'
+gem 'pry'
+
 group :test do
   gem 'capybara'
   gem 'database_cleaner'

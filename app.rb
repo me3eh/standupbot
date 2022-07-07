@@ -10,14 +10,18 @@ Dir[File.expand_path('config/initializers', __dir__) + '/**/*.rb'].sort.each do 
 end
 
 
-require_relative 'lib/models'
-require_relative 'lib/events'
-require_relative 'lib/slash_commands'
-require_relative 'lib/actions'
-require_relative 'lib/additional_modules'
+# require_relative 'lib/models'
+# require_relative 'lib/events'
+# require_relative 'slash_commands'
+# require_relative 'lib/actions'
+# require_relative 'lib/additional_modules'
 
 require 'yaml'
 require 'erb'
+require 'date'
+require_relative 'lib/classes/everything_needed'
+["slash_commands", "models", "actions", "events", "block_actions"].map{|u| Dir[ "#{u}/*.rb"].each {|file| require "./#{file}" } }
+
 
 
 ActiveRecord::Base.establish_connection(
@@ -28,4 +32,4 @@ ActiveRecord::Base.establish_connection(
   )[ENV['RACK_ENV']]
 )
 
-$everything_needed = Everything_Needed.new
+$everything_needed = EverythingNeeded.new
