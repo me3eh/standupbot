@@ -20,8 +20,9 @@ require 'yaml'
 require 'erb'
 require 'date'
 require_relative 'lib/classes/everything_needed'
-["slash_commands", "models", "actions", "events", "block_actions"].map{|u| Dir[ "#{u}/*.rb"].each {|file| require "./#{file}" } }
-
+["slash_commands", "models", "actions", "events", "modules", "block_actions"].map do |u|
+  Dir[ "lib/#{u}/*.rb"].each {|file| require_relative "#{file}" }
+end
 
 
 ActiveRecord::Base.establish_connection(
