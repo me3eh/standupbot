@@ -1,150 +1,143 @@
 module Morning_Standup_Commands
-  def get_json_morning
-    [
-      {
-        "type": "header",
-        "text": {
-          "type": "plain_text",
-          "text": "Poranny Standup",
-          "emoji": true
-        }
-      },
-      {
-        "type": "input",
-        "element": {
-          "type": "plain_text_input",
-          "multiline": true,
-          "action_id": "input",
-        },
-        "label": {
-          "type": "plain_text",
-          "text": "1. Jakie zadania na dziś planujesz oraz jak oceniasz czas ich wykonania?",
-          "emoji": true
-        },
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "input",
-        "element": {
-          "type": "plain_text_input",
-          "multiline": true,
-          "action_id": "input"
-        },
-        "label": {
-          "type": "plain_text",
-          "text": "2. Jakie widzisz zagrożenia i blockery w powyższej liście?",
-          "emoji": true
-        }
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "input",
-        "element": {
-          "type": "plain_text_input",
-          "multiline": true,
-          "action_id": "input"
-        },
-        "label": {
-          "type": "plain_text",
-          "text": "3. Czy w któryms z powyższych tematów chciałbyś otrzymać pomoc?",
-          "emoji": true
-        }
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "divider"
-      },
-      {
-        "type": "input",
-        "element": {
-          "type": "plain_text_input",
-          "multiline": true,
-          "action_id": "input"
-        },
-        "label": {
-          "type": "plain_text",
-          "text": "4. Czy w którymś z planowanych zadań przyjąłbyś kompana do Pair programmingu / konsultacji / podzielenia się wiedzą doświadczeniami ?",
-          "emoji": true
-        }
-      },
-      {
-        "type": "actions",
-        "elements": [
-          {
-            "type": "checkboxes",
-            "options": [
-              {
-                "text": {
-                  "type": "mrkdwn",
-                  "text": "*Open for PP*"
-                },
-                "description": {
-                  "type": "mrkdwn",
-                  "text": "*Zaznaczenie na własną odpowiedzialność*"
-                },
-                "value": "value-2"
-              }
-            ],
-            "action_id": "actionblank"
-          }
-        ]
-      },
-      {
-        "type": "actions",
-        "elements": [
-          {
-            "type": "radio_buttons",
-            "options": [
-              {
-                "text": {
-                  "type": "plain_text",
-                  "text": "Stacjonarnie",
-                  "emoji": true
-                },
-                "value": "stationary"
-              },
-              {
-                "text": {
-                  "type": "plain_text",
-                  "text": "Zdalnie",
-                  "emoji": true
-                },
-                "value": "remotely"
-              }
-            ],
-            "action_id": "choice"
-          }
-        ]
-      },
-      {
-        "type": "actions",
-        "elements": [
-          {
-            "type": "button",
-            "text": {
-              "type": "plain_text",
-              "text": "Potwierdź",
-              "emoji": true
-            },
-            "value": "click_me_123",
-            "action_id": "actionId-0"
-          }
-        ]
-      }
-    ]
-  end
+  # def get_json_morning
+  #   [
+  #     Jsons::Header.call(text: "Poranny Standup"),
+  #     {
+  #       "type": "input",
+  #       "element": {
+  #         "type": "plain_text_input",
+  #         "multiline": true,
+  #         "action_id": "input",
+  #       },
+  #       "label": {
+  #         "type": "plain_text",
+  #         "text": "1. Jakie zadania na dziś planujesz oraz jak oceniasz czas ich wykonania?",
+  #         "emoji": true
+  #       },
+  #     },
+  #     {
+  #       "type": "divider"
+  #     },
+  #     {
+  #       "type": "divider"
+  #     },
+  #     {
+  #       "type": "input",
+  #       "element": {
+  #         "type": "plain_text_input",
+  #         "multiline": true,
+  #         "action_id": "input"
+  #       },
+  #       "label": {
+  #         "type": "plain_text",
+  #         "text": "2. Jakie widzisz zagrożenia i blockery w powyższej liście?",
+  #         "emoji": true
+  #       }
+  #     },
+  #     {
+  #       "type": "divider"
+  #     },
+  #     {
+  #       "type": "divider"
+  #     },
+  #     {
+  #       "type": "input",
+  #       "element": {
+  #         "type": "plain_text_input",
+  #         "multiline": true,
+  #         "action_id": "input"
+  #       },
+  #       "label": {
+  #         "type": "plain_text",
+  #         "text": "3. Czy w któryms z powyższych tematów chciałbyś otrzymać pomoc?",
+  #         "emoji": true
+  #       }
+  #     },
+  #     {
+  #       "type": "divider"
+  #     },
+  #     {
+  #       "type": "divider"
+  #     },
+  #     {
+  #       "type": "input",
+  #       "element": {
+  #         "type": "plain_text_input",
+  #         "multiline": true,
+  #         "action_id": "input"
+  #       },
+  #       "label": {
+  #         "type": "plain_text",
+  #         "text": "4. Czy w którymś z planowanych zadań przyjąłbyś kompana do Pair programmingu / konsultacji / podzielenia się wiedzą doświadczeniami ?",
+  #         "emoji": true
+  #       }
+  #     },
+  #     {
+  #       "type": "actions",
+  #       "elements": [
+  #         {
+  #           "type": "checkboxes",
+  #           "options": [
+  #             {
+  #               "text": {
+  #                 "type": "mrkdwn",
+  #                 "text": "*Open for PP*"
+  #               },
+  #               "description": {
+  #                 "type": "mrkdwn",
+  #                 "text": "*Zaznaczenie na własną odpowiedzialność*"
+  #               },
+  #               "value": "value-2"
+  #             }
+  #           ],
+  #           "action_id": "actionblank"
+  #         }
+  #       ]
+  #     },
+  #     {
+  #       "type": "actions",
+  #       "elements": [
+  #         {
+  #           "type": "radio_buttons",
+  #           "options": [
+  #             {
+  #               "text": {
+  #                 "type": "plain_text",
+  #                 "text": "Stacjonarnie",
+  #                 "emoji": true
+  #               },
+  #               "value": "stationary"
+  #             },
+  #             {
+  #               "text": {
+  #                 "type": "plain_text",
+  #                 "text": "Zdalnie",
+  #                 "emoji": true
+  #               },
+  #               "value": "remotely"
+  #             }
+  #           ],
+  #           "action_id": "choice"
+  #         }
+  #       ]
+  #     },
+  #     {
+  #       "type": "actions",
+  #       "elements": [
+  #         {
+  #           "type": "button",
+  #           "text": {
+  #             "type": "plain_text",
+  #             "text": "Potwierdź",
+  #             "emoji": true
+  #           },
+  #           "value": "click_me_123",
+  #           "action_id": "actionId-0"
+  #         }
+  #       ]
+  #     }
+  #   ]
+  # end
   def get_initial_check_box__morning
     {
       "initial_options" =>
@@ -164,22 +157,22 @@ module Morning_Standup_Commands
     }
   end
 
-  def fulfilling_inputs_with_previous_answers(json_blocks:, form_inputs:)
-    0.upto(3) do |form_number|
-      json_blocks[form_number * 3 + 2][:element] =
-        json_blocks[form_number * 3 + 2][:element].merge(
-          { "initial_value": form_inputs[form_number] }
-        )
-    end
-  end
+  # def fulfilling_inputs_with_previous_answers(json_blocks:, form_inputs:)
+  #   0.upto(3) do |form_number|
+  #     json_blocks[form_number * 3 + 2][:element] =
+  #       json_blocks[form_number * 3 + 2][:element].merge(
+  #         { "initial_value": form_inputs[form_number] }
+  #       )
+  #   end
+  # end
 
-  def checking_option_for_working_place(json_blocks:, standup:)
-    json_blocks[13][:elements][0] =
-      json_blocks[13][:elements][0].merge(
-        get_initial_radio_button(
-          is_stationary: standup.is_stationary)
-      ) unless not_checked_option_for_working_place(standup)
-  end
+  # def checking_option_for_working_place(json_blocks:, standup:)
+  #   json_blocks[13][:elements][0] =
+  #     json_blocks[13][:elements][0].merge(
+  #       get_initial_radio_button(
+  #         is_stationary: standup.is_stationary)
+  #     ) unless not_checked_option_for_working_place(standup)
+  # end
 
   def not_checked_option_for_working_place(standup)
     standup.is_stationary.equal?(0)
