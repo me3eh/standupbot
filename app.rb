@@ -12,11 +12,14 @@ end
 require 'yaml'
 require 'erb'
 require 'date'
+require 'pp'
 
-require_relative 'lib/classes/everything_needed'
-["slash_commands", "models", "actions", "events", "modules", "block_actions", "jsons", "forms"].map do |u|
+require_relative 'importing_files'
+
+["slash_commands", "actions", "events", "modules", "block_actions"].map do |u|
   Dir[ "lib/#{u}/*.rb"].each {|file| require_relative "#{file}" }
 end
+
 
 
 ActiveRecord::Base.establish_connection(

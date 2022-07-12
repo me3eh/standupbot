@@ -36,6 +36,7 @@ SlackRubyBotServer::Events.configure do |config|
     #   checking_option_for_pp(json_blocks: json_blocks, standup: standup)
     #
     # end
+    pp json_blocks
     {
       "blocks": json_blocks
     }

@@ -8,14 +8,9 @@ module Jsons
       raise Errors.new("Parameter need to have only hashes") unless options.all? Hash
 
       {
-        "type": "actions",
-        "elements": [
-          {
-            "type": "radio_buttons",
-            "options": options,
-            "action_id": "choice"
-          }
-        ]
+        "type": "radio_buttons",
+        "options": options,
+        "action_id": "choice"
       }
     end
   end

@@ -15,11 +15,12 @@ module Forms
       json = []
       json << Jsons::Header.call(text: "Poranny Standup")
       json << merged_inputs
-      json << [
+      json << Jsons::Action.call([
         Jsons::RadioButtons.call(radio_button_options),
         Jsons::Checkbox.call(checkbox_options),
         Jsons::SubmitButton.call(text: "Potwierdź", value: "click_me_123", id_of_action: "actionId-0")
-      ]
+      ])
+
       json.flatten
     end
 
@@ -33,7 +34,7 @@ module Forms
           json_with_inputs << Jsons::Divider.call
         end if index != 0
 
-        json_with_inputs << Jsons::Input.call(is_multiline: true, text_for_label: text)
+        json_with_inputs << Jsons::Input.call(id: index, is_multiline: true, text_for_label: text)
       end
       json_with_inputs
     end
@@ -46,7 +47,9 @@ module Forms
     end
     def checkbox_options
       [
-        Jsons::FormOption.call(text: "Open for PP*", description: "Zaznaczenie na własną odpowiedzialność", value: "checked"),
+        Jsons::CheckboxOption.call_with_description(text: "Open for PP",
+                                                    description: "Zaznaczenie na własną odpowiedzialność",
+                                                    value: "checked")
       ]
     end
   end

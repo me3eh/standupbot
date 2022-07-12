@@ -28,12 +28,10 @@ describe Jsons::RadioButtons do
 
   context 'when trying to use radio buttons with parameter as array' do
     it 'succeeds' do
-      binding.pry
       expect( result.call(valid_options).class ).to eq(Hash)
     end
 
     it 'throws error related to object specifications' do
-      expect{ result.call(invalid_options) }.to raise_error(Jsons::RadioButtons::Errors)
       expect{ result.call(invalid_options) }.to raise_error("Parameter need to be array")
     end
   end

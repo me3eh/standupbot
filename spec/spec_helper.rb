@@ -94,8 +94,4 @@ RSpec.configure do |config|
   #   Kernel.srand config.seed
 end
 require 'active_record'
-require_relative '../lib/classes/everything_needed'
-
-["slash_commands", "models", "actions", "events", "modules", "block_actions", "jsons", "forms"].map do |u|
-  Dir[ "../lib/#{u}/*.rb"].each {|file| require_relative "#{file}" }
-end
+require_relative '../importing_files'
