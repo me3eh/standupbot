@@ -208,88 +208,88 @@ module Morning_Standup_Commands
     standup.open_for_pp
   end
 
-  def gathering_responds_from_form_morning(responds:,arguments_from_form:, creating_standup:)
-    arguments_from_form.each.with_index do |u, index|
-      if !creating_standup && first_argument(index)
-        responds.append( u[1][:edit_option][:selected_option][:value])
-      elsif !last_argument?(index, arguments_from_form) && !next_to_last_argument?(index, arguments_from_form)
-        responds.append u[1][:input].nil? ?
-                        ":speak_no_evil:" :
-                          u[1][:input][:value].nil? ?
-                            ":speak_no_evil:" :
-                            u[1][:input][:value]
-      elsif next_to_last_argument?(index, arguments_from_form)
-        responds.append(u[1][:actionblank][:selected_options].empty? ?
-                          false : true)
-      elsif last_argument?(index, arguments_from_form)
-        responds.append(u[1][:choice][:selected_option].nil? ?
-                          "Idk, gdzieś w przestrzeni kosmicznej" :
-                          u[1][:choice][:selected_option][:text][:text])
-     end
-    end
-  end
-
-  def last_argument?(index, arguments_from_form)
-    index.eql?(arguments_from_form.size-1)
-  end
-  def next_to_last_argument?(index, arguments_from_form)
-    index.eql?(arguments_from_form.size-2)
-  end
+  # def gathering_responds_from_form_morning(responds:,arguments_from_form:, creating_standup:)
+  #   arguments_from_form.each.with_index do |u, index|
+  #     if !creating_standup && first_argument(index)
+  #       responds.append( u[1][:edit_option][:selected_option][:value])
+  #     elsif !last_argument?(index, arguments_from_form) && !next_to_last_argument?(index, arguments_from_form)
+  #       responds.append u[1][:input].nil? ?
+  #                       ":speak_no_evil:" :
+  #                         u[1][:input][:value].nil? ?
+  #                           ":speak_no_evil:" :
+  #                           u[1][:input][:value]
+  #     elsif next_to_last_argument?(index, arguments_from_form)
+  #       responds.append(u[1][:actionblank][:selected_options].empty? ?
+  #                         false : true)
+  #     elsif last_argument?(index, arguments_from_form)
+  #       responds.append(u[1][:choice][:selected_option].nil? ?
+  #                         "Idk, gdzieś w przestrzeni kosmicznej" :
+  #                         u[1][:choice][:selected_option][:text][:text])
+  #    end
+  #   end
+  # end
+  #
+  # def last_argument?(index, arguments_from_form)
+  #   index.eql?(arguments_from_form.size-1)
+  # end
+  # def next_to_last_argument?(index, arguments_from_form)
+  #   index.eql?(arguments_from_form.size-2)
+  # end
 
   def stationary_or_remotely(choice)
     choice.eql?("Stacjonarnie") ? 1 : 2
   end
-  def post_public_morning(slack_client:,
-                          command_channel:,
-                          name_of_user:,
-                          word:,
-                          pic:,
-                          value_1_if_editing_existing_standup:)
-    open_for_pp = word[4 + value_1_if_editing_existing_standup] ? "\t*#Open for PP*" : " "
-    place = "\n\n\n*##{word[5 + value_1_if_editing_existing_standup]}*"
-    slack_client.chat_postMessage(
-      channel: command_channel,
-      "blocks": [
-        {
-          "type": "header",
-          "text": {
-            "type": "plain_text",
-            "text": "Standup poranny: "+
-              "#{name_of_user}",
-            "emoji": true
-          }
-        },
-      ],
-      "attachments": [
-        fields:[
-          {
-            "title": "1. Zadania na dziś",
-            "value": word[0 + value_1_if_editing_existing_standup],
-            "short": false
-          },
-          {
-            "title": "2. Blockery",
-            "value": word[1 + value_1_if_editing_existing_standup],
-            "short": false
-          },
-          {
-            "title": "3. Pomoc?",
-            "value": word[2 + value_1_if_editing_existing_standup],
-            "short": false
-          },
-          {
-            "title": "4. Kompan do pomocy?",
-            "value": word[3 + value_1_if_editing_existing_standup],
-            "short": false
-          },
-        ],
-        footer: " #{place} #{open_for_pp}",
-        color: "#bfff00",
-        thumb_url: "#{pic}",
-      ],
-      as_user: true,
-      )
-  end
+  # def post_public_morning(slack_client:,
+  #                         command_channel:,
+  #                         name_of_user:,
+  #                         word:,
+  #                         pic:,
+  #                         value_1_if_editing_existing_standup:)
+  #   open_for_pp = word[4 + value_1_if_editing_existing_standup] ? "\t*#Open for PP*" : " "
+  #   place = "\n\n\n*##{word[5 + value_1_if_editing_existing_standup]}*"
+    # slack_client.chat_postMessage(
+    #   channel: command_channel,
+    #   "blocks": [
+    #     {
+    #       "type": "header",
+    #       "text": {
+    #         "type": "plain_text",
+    #         "text": "Standup poranny: "+
+    #           "#{name_of_user}",
+    #         "emoji": true
+    #       }
+    #     },
+    #   ],
+    #   "attachments": [
+    #     fields:[
+    #       {
+    #         "title": "1. Zadania na dziś",
+    #         "value": word[0 + value_1_if_editing_existing_standup],
+    #         "short": false
+    #       },
+    #       {
+    #         "title": "2. Blockery",
+    #         "value": word[1 + value_1_if_editing_existing_standup],
+    #         "short": false
+    #       },
+    #       {
+    #         "title": "3. Pomoc?",
+    #         "value": word[2 + value_1_if_editing_existing_standup],
+    #         "short": false
+    #       },
+    #       {
+    #         "title": "4. Kompan do pomocy?",
+    #         "value": word[3 + value_1_if_editing_existing_standup],
+    #         "short": false
+    #       },
+    #     ],
+    #     footer: " #{place} #{open_for_pp}",
+    #     color: "#bfff00",
+    #     thumb_url: "#{pic}",
+    #   ],
+    #   as_user: true,
+    #   )
+  # end
   def edit_public_morning(slack_client:,
                           command_channel:,
                           ts:,

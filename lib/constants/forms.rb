@@ -12,5 +12,6 @@ module Constants
     OPEN_FOR_PP = true
     NOT_REALLY_KEEN_FOR_PP = false
     EMOJI_FOR_MORNING = ":clown_face:"
+    COLOR_FOR_MORNING_STANDUP = "#bfff00"
   end
 end

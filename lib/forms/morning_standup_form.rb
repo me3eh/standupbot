@@ -14,7 +14,7 @@ module Forms
     def call(previous)
       json = []
       json << Jsons::Header.call(text: "Poranny Standup")
-      json << merged_inputs
+      json << merged_inputs(previous)
 
       elements_in_action_block = action_block(previous)
 
@@ -26,14 +26,16 @@ module Forms
     private
 
     def action_block(previous)
-      elements = [
-        Jsons::RadioButtons.call(radio_button_options),
-        Jsons::Checkbox.call(checkbox_options),
-        Jsons::SubmitButton.call(text: text_for_submit(previous), value: "save", id_of_action: "morning_saving"),
-      ]
-      elements << Jsons::SubmitButton.call(text: "Zapisz, usuwając poprzednią",
-                                           value: "delete_and_save",
-                                           id_of_action: "morning_deleting_and_saving") if previous.present?
+      elements = []
+
+      elements << Jsons::RadioButtons.call(radio_button_options, previous[:place])
+
+      elements << Jsons::Checkbox.call(checkbox_options, previous[:open_for_pp])
+      elements << Jsons::Button.call(color: "green", text: text_for_submit(previous), value: "save", id_of_action: "morning_saving")
+
+      elements << Jsons::Button.call(text: "Zapisz, usuwając poprzednią",
+                                     value: "delete_and_save",
+                                     id_of_action: "morning_deleting_and_saving") if previous.present?
       elements
     end
 
@@ -41,7 +43,7 @@ module Forms
       previous.present? ? "Edytuj poprzedni" : "Potwierdź"
     end
 
-    def merged_inputs
+    def merged_inputs(inputs)
       json_with_inputs = []
       TEXTS_FOR_INPUTS.each.with_index do |text, index|
 
@@ -49,7 +51,7 @@ module Forms
           json_with_inputs << Jsons::Divider.call
         end if index != 0
 
-        json_with_inputs << Jsons::Input.call(id: index, is_multiline: true, text_for_label: text)
+        json_with_inputs << Jsons::Input.call(inputs[:inputs][index], id: index, is_multiline: true, text_for_label: text)
       end
       json_with_inputs
     end
