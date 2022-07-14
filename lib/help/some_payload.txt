@@ -1,0 +1,50 @@
+{
+      "payload" => {
+        "type" => "block_actions", "user" => {
+          "id" => "U01Q32HRB2M", "username" => "bociukmeeeh", "name" => "bociukmeeeh", "team_id" => "T01PQKG5X19"
+        }, "api_app_id" => "A027MEL7PFB", "token" => "ZvL742hMVDa1s8evSWvGxBoQ", "container" => {
+          "type" => "message", "message_ts" => "1657721792.001400", "channel_id" => "C01PWJCSCKW", "is_ephemeral" => true
+        }, "trigger_id" => "3779789383335.1806662201043.774b2c3d563a4c4aea57aa758883a0ac", "team" => {
+          "id" => "T01PQKG5X19", "domain" => "pajaceroku"
+        }, "enterprise" => nil, "is_enterprise_install" => false, "channel" => {
+          "id" => "C01PWJCSCKW", "name" => "general"
+        }, "state" => {
+          "values" => {
+            "0" => {
+              "0" => {
+                "type" => "plain_text_input", "value" => first_answer
+              }
+            }, "1" => {
+              "1" => {
+                "type" => "plain_text_input", "value" => second_answer
+              }
+            }, "2" => {
+              "2" => {
+                "type" => "plain_text_input", "value" => third_answer
+              }
+            }, "3" => {
+              "3" => {
+                "type" => "plain_text_input", "value" => fourth_answer
+              }
+            }, "action" => {
+              "radio_choice" => {
+                "type" => "radio_buttons", "selected_option" => value_for_radio_button
+              }, "checkbox_choice" => {
+                "type" => "checkboxes",
+                "selected_options" => value_for_checkbox
+              }
+            }
+          }
+        }, "response_url" => "https://hooks.slack.com/actions/T01PQKG5X19/3807037570449/NklVBt6kuSjEBBVe5LnONBcN",
+        "actions" => [{
+         "action_id" => "actionId-0",
+         "block_id" => "action",
+         "text" => {
+           "type" => "plain_text", "text" => "Potwierdź", "emoji" => true
+         },
+         "value" => "click_me_123",
+         "type" => "button",
+         "action_ts" => "1657721798.468158"
+       }]
+      }
+    }

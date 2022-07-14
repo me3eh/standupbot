@@ -17,6 +17,9 @@ gem 'puma'
 gem 'rake'
 gem 'standalone_migrations'
 gem 'pry'
+gem 'rubocop'
+gem "clipboard"
+gem "ffi", :platforms => [:mswin, :mingw] # Required by Clipboard on Windows
 
 group :test do
   gem 'capybara'

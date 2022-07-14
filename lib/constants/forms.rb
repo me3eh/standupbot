@@ -11,5 +11,6 @@ module Constants
     SOMEWHERE_FAR_AWAY = 0
     OPEN_FOR_PP = true
     NOT_REALLY_KEEN_FOR_PP = false
+    EMOJI_FOR_MORNING = ":clown_face:"
   end
 end

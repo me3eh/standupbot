@@ -10,11 +10,11 @@ SlackRubyBotServer::Events.configure do |config|
       team: team_id
     )
 
-    if standup.present? && standup.morning_stand
+    # if standup.present? && standup.morning_stand
 
-    else
-      json_blocks = Forms::MorningStandupForm.call
-    end
+    # else
+    json_blocks = Forms::MorningStandupForm.call(standup)
+    # end
     #   if command[:text] == '-e'
     #     json_blocks.unshift(edit_options_alternative_options)
     #   else

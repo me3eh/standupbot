@@ -4,13 +4,13 @@ module Jsons
     extend self
 
     def call(options)
-      raise Errors.new("Parameter need to be array") unless options.is_a? Array
-      raise Errors.new("Parameter need to have only hashes") unless options.all? Hash
+      raise ObjectMustBeArray.new unless options.is_a? Array
+      raise ArrayMustBeFilledWithHashes.new unless options.all? Hash
 
       {
         "type": "radio_buttons",
         "options": options,
-        "action_id": "choice"
+        "action_id": "radio_choice"
       }
     end
   end

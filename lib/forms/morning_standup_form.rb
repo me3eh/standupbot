@@ -11,20 +11,35 @@ module Forms
         "podzielenia się wiedzą doświadczeniami ?"
     ].freeze
 
-    def call
+    def call(previous)
       json = []
       json << Jsons::Header.call(text: "Poranny Standup")
       json << merged_inputs
-      json << Jsons::Action.call([
-        Jsons::RadioButtons.call(radio_button_options),
-        Jsons::Checkbox.call(checkbox_options),
-        Jsons::SubmitButton.call(text: "Potwierdź", value: "click_me_123", id_of_action: "actionId-0")
-      ])
+
+      elements_in_action_block = action_block(previous)
+
+      json << Jsons::Action.call(elements_in_action_block)
 
       json.flatten
     end
 
     private
+
+    def action_block(previous)
+      elements = [
+        Jsons::RadioButtons.call(radio_button_options),
+        Jsons::Checkbox.call(checkbox_options),
+        Jsons::SubmitButton.call(text: text_for_submit(previous), value: "save", id_of_action: "morning_saving"),
+      ]
+      elements << Jsons::SubmitButton.call(text: "Zapisz, usuwając poprzednią",
+                                           value: "delete_and_save",
+                                           id_of_action: "morning_deleting_and_saving") if previous.present?
+      elements
+    end
+
+    def text_for_submit(previous)
+      previous.present? ? "Edytuj poprzedni" : "Potwierdź"
+    end
 
     def merged_inputs
       json_with_inputs = []
@@ -45,6 +60,7 @@ module Forms
         Jsons::FormOption.call(text: "Zdalnie", value: "remotely")
       ]
     end
+
     def checkbox_options
       [
         Jsons::CheckboxOption.call_with_description(text: "Open for PP",
