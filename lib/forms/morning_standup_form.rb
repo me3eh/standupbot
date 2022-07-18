@@ -11,12 +11,12 @@ module Forms
         "podzielenia się wiedzą doświadczeniami ?"
     ].freeze
 
-    def call(previous)
+    def call(previous_inputs)
       json = []
       json << Jsons::Header.call(text: "Poranny Standup")
-      json << merged_inputs(previous)
+      json << merged_inputs(previous_inputs)
 
-      elements_in_action_block = action_block(previous)
+      elements_in_action_block = action_block(previous_inputs)
 
       json << Jsons::Action.call(elements_in_action_block)
 
@@ -25,25 +25,22 @@ module Forms
 
     private
 
-    def action_block(previous)
+    def action_block(previous_inputs)
       elements = []
 
-      elements << Jsons::RadioButtons.call(radio_button_options, previous[:place])
-
-      elements << Jsons::Checkbox.call(checkbox_options, previous[:open_for_pp])
-      elements << Jsons::Button.call(color: "green", text: text_for_submit(previous), value: "save", id_of_action: "morning_saving")
-
+      elements << Jsons::RadioButtons.call(radio_button_options, input_initial_options(previous_inputs, symbol: :place))
+      elements << Jsons::Checkbox.call(checkbox_options, input_initial_options(previous_inputs, symbol: :open_for_pp))
+      elements << Jsons::Button.call(color: "green",
+                                     text: Constants::Forms.text_for_submit(input: previous_inputs),
+                                     value: "save",
+                                     id_of_action: "morning_saving")
       elements << Jsons::Button.call(text: "Zapisz, usuwając poprzednią",
                                      value: "delete_and_save",
-                                     id_of_action: "morning_deleting_and_saving") if previous.present?
+                                     id_of_action: "morning_deleting_and_saving") if previous_inputs.present?
       elements
     end
 
-    def text_for_submit(previous)
-      previous.present? ? "Edytuj poprzedni" : "Potwierdź"
-    end
-
-    def merged_inputs(inputs)
+    def merged_inputs(previous_inputs)
       json_with_inputs = []
       TEXTS_FOR_INPUTS.each.with_index do |text, index|
 
@@ -51,7 +48,9 @@ module Forms
           json_with_inputs << Jsons::Divider.call
         end if index != 0
 
-        json_with_inputs << Jsons::Input.call(inputs[:inputs][index], id: index, is_multiline: true, text_for_label: text)
+        json_with_inputs << Jsons::Input.call( input_initial_options(previous_inputs, symbol: :inputs, input: index),
+                                               id: index, is_multiline: true, text_for_label: text)
+
       end
       json_with_inputs
     end
@@ -69,6 +68,13 @@ module Forms
                                                     description: "Zaznaczenie na własną odpowiedzialność",
                                                     value: "checked")
       ]
+    end
+
+    def input_initial_options(previous_inputs, input:nil ,symbol:)
+      return nil if previous_inputs.nil?
+      return previous_inputs.dig(symbol) if input.nil?
+
+      previous_inputs.dig(symbol, input)
     end
   end
 end

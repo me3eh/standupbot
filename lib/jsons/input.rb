@@ -23,11 +23,7 @@ module Jsons
     private
 
     def string_with_initial_value(initial_value)
-      if initial_value.present?
-        initial_value
-      else
-        ""
-      end
+      initial_value.present? ? initial_value : ""
     end
   end
 end

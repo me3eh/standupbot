@@ -1,7 +1,7 @@
 require 'rspec'
 
 describe GatherRespondsFromMorning do
-  subject(:result) { described_class.call(response["payload"]["state"]["values"])}
+  subject(:result) { described_class.call(response)}
 
   let(:response) do
     {

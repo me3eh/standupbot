@@ -81,6 +81,8 @@ GEM
       dry-logic (~> 1.0, >= 1.0.2)
     erubi (1.10.0)
     fabrication (2.22.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
     faker (2.18.0)
       i18n (>= 1.6, < 2)
     faraday (1.4.3)
@@ -291,6 +293,7 @@ DEPENDENCIES
   clipboard
   database_cleaner
   fabrication
+  factory_bot
   faker
   ffi
   grape

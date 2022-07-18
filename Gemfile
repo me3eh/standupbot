@@ -31,4 +31,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'vcr'
   gem 'webmock'
+  gem "factory_bot"
 end
