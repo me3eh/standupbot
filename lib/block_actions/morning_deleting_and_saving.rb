@@ -22,12 +22,12 @@ SlackRubyBotServer::Events.configure do |config|
 
     slack_client.chat_delete(channel: channel_id,
                              ts: standup.ts_of_message_morning)
-
-    ts_message = MorningStandup.post_new(slack_client: slack_client,
-                                           channel_id: channel_id,
-                                           text_for_header: "Poranny Standup: #{name}",
-                                           pic: pic,
-                                           responds: responds)[:ts]
+    ts_message = MorningStandup.post_or_edit(slack_client: slack_client,
+                                         channel_id: channel_id,
+                                         text_for_header: "Poranny Standup: #{name}",
+                                         pic: pic,
+                                         responds: responds,
+                                         username: name)[:ts]
 
     standup.update!(
       team: team_id,
@@ -38,10 +38,10 @@ SlackRubyBotServer::Events.configure do |config|
       channel_of_message_morning: channel_id,
       morning_first: responds[:first_input],
       morning_second: responds[:second_input],
-      morning_third: responds[:second_input],
-      morning_fourth: responds[:third_input],
-      open_for_pp: responds[:fourth_input],
-      is_stationary: responds[:radio_button],
+      morning_third: responds[:third_input],
+      morning_fourth: responds[:fourth_input],
+      open_for_pp: responds[:open_for_pp],
+      is_stationary: responds[:place],
     )
   end
 end

@@ -24,7 +24,8 @@ module Jsons
     end
 
     def prepare_initial_array(options, initial_options)
-      return options[0] if initial_options.is_a?(TrueClass)
+
+      return [options[0]] if initial_options == true
 
       array_with_choices = []
       initial_options.each do |initial|

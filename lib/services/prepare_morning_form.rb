@@ -10,13 +10,13 @@ module PrepareMorningForm
       team: team_id
     )
 
-    inputs = if standup.nil?
+    inputs = if standup.nil? || !standup.morning_stand
                nil
              else
                {
                  inputs: [standup.morning_first, standup.morning_second,
                           standup.morning_third, standup.morning_fourth],
-                 is_stationary: standup.is_stationary,
+                 place: standup.is_stationary,
                  open_for_pp: standup.open_for_pp
                }
              end

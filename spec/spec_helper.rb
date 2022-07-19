@@ -7,6 +7,9 @@ require 'factory_bot'
 require 'active_record'
 require 'faker'
 require 'database_cleaner'
+require 'capybara'
+require 'selenium/webdriver'
+require 'capybara/rspec'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -21,11 +24,13 @@ RSpec.configure do |config|
   #---------------------------------------
   #FACTORY BOT SETUP
   config.include FactoryBot::Syntax::Methods
+
+  # config.include Capybara::DSL
   #---------------------------------------
   #DATABASE CLEANUP
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with(:truncation, except: %w[teams])
   end
 
   config.before(:each) do
@@ -33,9 +38,30 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    DatabaseCleaner.clean
+    DatabaseCleaner.clean_with(:truncation, except: %w[teams])
   end
 end
+
+begin
+  ActiveRecord::Migration.maintain_test_schema!
+rescue ActiveRecord::PendingMigrationError => e
+  puts e.to_s.strip
+  exit 1
+end
+require_relative 'helpers/login_helper'
+
+Capybara.configure do |c|
+  c.default_driver = :selenium_headless
+end
+
+ActiveRecord::Base.establish_connection(
+  YAML.safe_load(
+    ERB.new(
+      File.read('config/postgresql.yml')
+    ).result, [], [], true
+  )['test']
+)
+
 
 require_relative '../importing_files'
 require_relative 'factories/standup_check_factory'

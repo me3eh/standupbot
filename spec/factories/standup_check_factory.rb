@@ -14,7 +14,7 @@ FactoryBot.define do
       morning_third { Faker::Games::Zelda.character }
       morning_fourth { Faker::Games::Zelda.character }
       open_for_pp { true }
-      is_stationary { 1 }
+      is_stationary { Constants::Forms::STATIONARY }
     end
 
     trait :evening_standup do

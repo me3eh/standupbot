@@ -60,8 +60,8 @@ describe GatherRespondsFromMorning do
         expect(result[:second_input]).to eq(second_answer)
         expect(result[:third_input]).to eq(third_answer)
         expect(result[:fourth_input]).to eq(fourth_answer)
-        expect(result[:radio_button]).to eq(Constants::Forms::REMOTELY)
-        expect(result[:checkbox]).to eq(true)
+        expect(result[:place]).to eq(Constants::Forms::REMOTELY)
+        expect(result[:open_for_pp]).to eq(true)
       end
     end
 
@@ -75,15 +75,15 @@ describe GatherRespondsFromMorning do
         expect(result[:second_input]).to eq(":clown_face:")
         expect(result[:third_input]).to eq(":clown_face:")
         expect(result[:fourth_input]).to eq(fourth_answer)
-        expect(result[:radio_button]).to eq(Constants::Forms::REMOTELY)
-        expect(result[:checkbox]).to eq(true)
+        expect(result[:place]).to eq(Constants::Forms::REMOTELY)
+        expect(result[:open_for_pp]).to eq(true)
       end
     end
 
     context "and leaving checkbox field not checked" do
       let(:value_for_checkbox) { [] }
       it 'will return false for checkbox' do
-        expect(result[:checkbox]).to eq(false)
+        expect(result[:open_for_pp]).to eq(false)
       end
     end
 
@@ -96,13 +96,13 @@ describe GatherRespondsFromMorning do
         }
       end
       it 'will return stationary type of work in radio button' do
-        expect(result[:radio_button]).to eq(Constants::Forms::STATIONARY)
+        expect(result[:place]).to eq(Constants::Forms::STATIONARY)
       end
     end
     context "and checking nothing in radio button field" do
       let(:value_for_radio_button) { nil}
       it 'will return stationary type of work in radio button' do
-        expect(result[:radio_button]).to eq(Constants::Forms::SOMEWHERE_FAR_AWAY)
+        expect(result[:place]).to eq(Constants::Forms::SOMEWHERE_FAR_AWAY)
       end
     end
   end

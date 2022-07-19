@@ -8,8 +8,8 @@ module GatherRespondsFromMorning
     inputs.each.with_index do |input, index|
       responds[input] = input_field_value(responds_from_form[index.to_s][index.to_s]["value"])
     end
-    responds[:radio_button] = radio_buttons_option(responds_from_form["action"]["radio_choice"]["selected_option"])
-    responds[:checkbox] = checkbox_checked?(responds_from_form["action"]["checkbox_choice"]["selected_options"])
+    responds[:place] = radio_buttons_option(responds_from_form["action"]["radio_choice"]["selected_option"])
+    responds[:open_for_pp] = checkbox_checked?(responds_from_form["action"]["checkbox_choice"]["selected_options"])
     responds
   end
 

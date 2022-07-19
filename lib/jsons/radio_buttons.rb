@@ -13,15 +13,11 @@ module Jsons
           "action_id": "radio_choice"
         }
       else
-        # initial_options = []
-        # values.each do |u|
-        #   initial_options << options[u]
-        # end
         {
           "type": "radio_buttons",
           "options": options,
           "action_id": "radio_choice",
-          "initial_option": options[initial_option - 1]
+          "initial_option": options[initial_option]
         }
       end
     end

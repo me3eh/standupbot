@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-ENV['RACK_ENV'] ||= 'development'
 
 require 'bundler'
 Bundler.require :default
@@ -13,13 +12,14 @@ require 'yaml'
 require 'erb'
 require 'date'
 require 'pp'
-
 require_relative 'importing_files'
 
+ENV['RACK_ENV'] = 'test'
+
+# puts "dyyyyyy" + ENV['RACK_ENV']
 ["slash_commands", "actions", "events", "modules", "block_actions"].map do |u|
   Dir[ "lib/#{u}/*.rb"].each {|file| require_relative "#{file}" }
 end
-
 
 
 ActiveRecord::Base.establish_connection(
