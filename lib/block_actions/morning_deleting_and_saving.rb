@@ -9,11 +9,11 @@ SlackRubyBotServer::Events.configure do |config|
 
     responds = GatherRespondsFromMorning.call( action[:payload][:state][:values])
 
-    Faraday.post(action[:payload][:response_url], {
-      text: "Dzięki za przeslanie",
-      response_type: 'in_channel'
-    }.to_json, 'Content-Type' => 'application/json')
-    { ok: true }
+    # Faraday.post(action[:payload][:response_url], {
+    #   text: "Dzięki za przeslanie",
+    #   response_type: 'in_channel'
+    # }.to_json, 'Content-Type' => 'application/json')
+    # { ok: true }
 
     date_now = Date.today
     standup = Standup_Check.find_by(user_id: user_id,
@@ -43,5 +43,6 @@ SlackRubyBotServer::Events.configure do |config|
       open_for_pp: responds[:open_for_pp],
       is_stationary: responds[:place],
     )
+    HideMessage.call(action[:payload][:response_url])
   end
 end

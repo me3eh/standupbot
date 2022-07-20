@@ -1,7 +1,5 @@
 SlackRubyBotServer::Events.configure do |config|
-  config.on :action, 'interactive_message', 'delete_ephemeral' do |action|
-    Faraday.post(action[:payload][:response_url], {
-      delete_original: true
-    }.to_json, 'Content-Type' => 'application/json')
+  config.on :action, 'block_actions', 'delete_ephemeral' do |action|
+    HideMessage.call(action[:payload][:response_url])
   end
 end
