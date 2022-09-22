@@ -1,4 +1,4 @@
-class Everything_Needed
+class EverythingNeeded
   attr_accessor :array_of_members
   def initialize
     @list_slack_clients = {}

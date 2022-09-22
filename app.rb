@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-ENV['RACK_ENV'] ||= 'development'
 
 require 'bundler'
 Bundler.require :default
@@ -9,15 +8,18 @@ Dir[File.expand_path('config/initializers', __dir__) + '/**/*.rb'].sort.each do 
   require file
 end
 
-
-require_relative 'lib/models'
-require_relative 'lib/events'
-require_relative 'lib/slash_commands'
-require_relative 'lib/actions'
-require_relative 'lib/additional_modules'
-
 require 'yaml'
 require 'erb'
+require 'date'
+require 'pp'
+require_relative 'importing_files'
+
+ENV['RACK_ENV'] = 'test'
+
+# puts "dyyyyyy" + ENV['RACK_ENV']
+["slash_commands", "actions", "events", "modules", "block_actions"].map do |u|
+  Dir[ "lib/#{u}/*.rb"].each {|file| require_relative "#{file}" }
+end
 
 
 ActiveRecord::Base.establish_connection(
@@ -28,4 +30,4 @@ ActiveRecord::Base.establish_connection(
   )[ENV['RACK_ENV']]
 )
 
-$everything_needed = Everything_Needed.new
+$everything_needed = EverythingNeeded.new
