@@ -21,6 +21,14 @@ gem 'rubocop'
 gem "clipboard"
 gem "ffi", :platforms => [:mswin, :mingw] # Required by Clipboard on Windows
 
+group :development do
+  gem 'capistrano'
+  gem 'capistrano-rvm'
+  gem 'capistrano-rails'
+  gem 'capistrano3-puma'
+  gem 'capistrano-passenger'
+end
+
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
