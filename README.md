@@ -79,14 +79,17 @@ opcjonalnie.
 pomoc (<b> /help </b> ) - możliwość sprawdzenia możliwych pytań na poranny oraz
 wieczorny standup oraz możliwość sprawdzenia istniejących w bocie komend.
 ## Rzeczy, które mogą się przydać:
-<h4>Podpięcie bazy danych do irb</h4>
+Podpięcie bazy danych do irb
 
 (w moim wypadku tylko dwie klasy-
 pewnie da sie lepiej, ale znalazłem tylko takie rozwiązanie dla ruby'ego z rake'iem)
 Możliwe jest przechodzenie między komendami, korzystając z intuicyjnych
 przycisków znajdujących się pod spodem wyświetlanego tekstu, umożliwiające
 szybkie i dynamiczne przełączanie się między stronami pomocy.
+
+
 ```ruby
+
 `require 'active_record'
 class Standup_Check < ActiveRecord::Base; end
 class Team < ActiveRecord::Base; end
@@ -96,12 +99,17 @@ Team.establish_connection(db_config['development'])
 Team.connection
 Standup_Check.connection`
 ```
-Usuniecie referencji 
+or
 ```ruby
-class DeleteReference < ActiveRecord::Migration[6.0]
-  def change
-    remove_column :standup_checks, :team_id
-  end
-end
-
+require_relative 'app'
 ```
+## Testing
+
+start server with command
+```bash
+RACK_ENV='test' foreman start
+```
+after completing tests, all tables will be wiped except teams, which tests simply needs 
+
+
+
