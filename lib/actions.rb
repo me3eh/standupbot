@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'actions/default'
+require_relative 'actions/edit_standup'
 require_relative 'actions/serin'
 require_relative 'actions/english_reminder'
 require_relative 'block_actions/morning'

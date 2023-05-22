@@ -1,5 +1,5 @@
 SlackRubyBotServer::Events.configure do |config|
-  config.on :command, '/evening_standup' do |command|
+  config.on :command, '/evening_standup1' do |command|
     include Keeper_pre_standup
     include Evening_Standup_Commands
     include Both_Standup_Commands
