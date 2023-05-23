@@ -14,6 +14,8 @@ require_relative 'lib/models'
 require_relative 'lib/events'
 require_relative 'lib/slash_commands'
 require_relative 'lib/actions'
+require_relative 'lib/jsons'
+require_relative 'lib/responses'
 require_relative 'lib/additional_modules'
 
 require 'yaml'
@@ -24,8 +26,7 @@ ActiveRecord::Base.establish_connection(
   YAML.safe_load(
     ERB.new(
       File.read('config/postgresql.yml')
-    ).result, [], [], true
-  )[ENV['RACK_ENV']]
+    ).result, aliases: true)[ENV['RACK_ENV']]
 )
 
 $everything_needed = Everything_Needed.new

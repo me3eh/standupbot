@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
-
-gem 'activerecord', require: 'active_record'
+ruby '3.2.0'
+gem "activerecord", ">= 6.0.6.1"
 gem 'irb'
 gem 'kramdown'
 gem 'newrelic-slack-ruby-bot'
@@ -15,6 +15,8 @@ gem 'slack-ruby-block-kit'
 gem 'puma'
 gem 'rake'
 gem 'standalone_migrations'
+gem 'pagy'
+gem 'pagy_cursor'
 group :test do
   gem 'capybara'
   gem 'database_cleaner'
