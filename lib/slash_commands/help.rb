@@ -1,6 +1,6 @@
 
 SlackRubyBotServer::Events.configure do |config|
-  config.on :command, '/help' do |command|
+  config.on :command, '/help1' do |command|
     # team = Team.find_by(team_id: command[:team_id].to_s) ||
     #   raise("Cannot find team with ID #{command[:team_id]}.")
 
