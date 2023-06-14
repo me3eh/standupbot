@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_101314) do
+ActiveRecord::Schema.define(version: 2023_06_13_165500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,10 @@ ActiveRecord::Schema.define(version: 2021_07_14_101314) do
     t.text "PRs_and_estimation"
     t.boolean "open_for_pp"
     t.integer "is_stationary", limit: 2
+    t.text "fifth_input"
+    t.text "sixth_input"
+    t.text "seventh_input"
+    t.text "eighth_input"
   end
 
   create_table "teams", force: :cascade do |t|

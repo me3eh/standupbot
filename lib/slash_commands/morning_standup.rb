@@ -8,4 +8,3 @@ SlackRubyBotServer::Events.configure do |config|
     }
   end
 end
-
