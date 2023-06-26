@@ -7,7 +7,6 @@ gem 'kramdown'
 gem 'newrelic-slack-ruby-bot'
 gem 'otr-activerecord'
 gem 'grape'
-gem 'pg'
 gem 'rack-server-pages'
 gem 'rack-test'
 gem 'slack-ruby-bot-server'
@@ -20,6 +19,8 @@ gem 'pry'
 gem 'rubocop'
 gem "clipboard"
 gem "ffi", :platforms => [:mswin, :mingw] # Required by Clipboard on Windows
+gem 'airrecord'
+gem 'pg'
 
 group :test do
   gem 'capybara'

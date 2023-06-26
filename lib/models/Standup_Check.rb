@@ -1,2 +1,2 @@
-class Standup_Check < ActiveRecord::Base
+class StandupCheck < ActiveRecord::Base
 end

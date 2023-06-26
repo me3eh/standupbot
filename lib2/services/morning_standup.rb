@@ -82,7 +82,7 @@ module Services
                 :seventh_input,
                 :eighth_input].freeze
   
-      def post(ts: nil, slack_client:, channel_id:, text_for_header:, responds:, pic:, username:)
+      def call(ts: nil, slack_client:, channel_id:, text_for_header:, responds:, pic:, username:)
         blocks = [Jsons::Header.call(text: text_for_header)]
         footer = " #{place(responds[:place])} \t #{open_for_pp(responds[:open_for_pp])}"
         color = "#bfff00"

@@ -1,5 +1,5 @@
 module Jsons
-  class JsonForm
+  class MorningForm
 
     def initialize; end
 
@@ -23,7 +23,7 @@ module Jsons
       blocks << Input::call(label_text: "7. Link do ticketów?", value_id: "seventh_input")
       blocks << Input::call(label_text: "8. Jakie gemy wykorzystałeś?", value_id: "eighth_input")
       blocks << Devider::call
-      blocks << ActionBlock::call
+      blocks << ActionBlock::call(action_button1: "morning_saving")
 
       { blocks: blocks }
 

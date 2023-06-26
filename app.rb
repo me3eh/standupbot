@@ -13,22 +13,23 @@ require 'yaml'
 require 'erb'
 require 'date'
 require 'pp'
-require_relative 'importing_files'
-
-Dir[ "lib2/**/*.rb"].each {|file| require_relative "#{file}" }
+require_relative 'lib/help/load_env'
+require 'airrecord'
 
 $ENV = LoadENV.new
-$ENV.get(:RACK_ENV)
+Dir[ "lib2/**/*.rb"].each {|file| require_relative "#{file}" }
+
+
 
 ActiveRecord::Base.establish_connection(
   YAML.safe_load(
     ERB.new(
       File.read('config/postgresql.yml')
     ).result, aliases: true
-  )[ENV['RACK_ENV']]
+  )[$ENV.get('RACK_ENV')]
 )
 
-#$everything_needed = EverythingNeeded.new
+# $everything_needed = EverythingNeeded.new
 # puts '8'
 # db_config = YAML.load_file('config/postgresql.yml')
 # Team.establish_connection(db_config[ENV['development']])

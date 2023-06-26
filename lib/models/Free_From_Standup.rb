@@ -1,2 +1,2 @@
-class Free_From_Standup < ActiveRecord::Base
+class FreeFromStandup < ActiveRecord::Base
 end
