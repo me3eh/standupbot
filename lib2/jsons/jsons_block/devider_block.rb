@@ -1,12 +1,9 @@
 module Jsons
-    module Devider 
+  module Devider
+    extend self
 
-        extend self
-
-        def call
-            { type: "divider" }
-        end
-
-
+    def call
+      { type: 'divider' }
     end
+  end
 end

@@ -1,4 +1,3 @@
-
 module LoginHelper
   extend self
   def call(session)
@@ -7,8 +6,8 @@ module LoginHelper
 
     session.click_button 'Continue'
     sleep(1)
-    #close popup which asks for cookie
-    session.find("#onetrust-reject-all-handler").click
+    # close popup which asks for cookie
+    session.find('#onetrust-reject-all-handler').click
 
     session.fill_in 'email', with: $ENV.get('SLACK_NAME')
     session.fill_in 'password', with: $ENV.get('SLACK_PASS')

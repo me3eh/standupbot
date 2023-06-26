@@ -1,19 +1,16 @@
 module Jsons
-    module Header
+  module Header
+    extend self
 
-        extend self
-
-        def call(text:)
-            {
-              type: "header",
-              text: {
-                type: "plain_text",
-                text: text,
-                emoji: true
-              }
-            }
-          end
-
+    def call(text:)
+      {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: text,
+          emoji: true
+        }
+      }
     end
+  end
 end
-

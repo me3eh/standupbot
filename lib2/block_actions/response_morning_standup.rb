@@ -15,7 +15,6 @@ SlackRubyBotServer::Events.configure do |config|
     ts_message = morning_standup.call(ts: ts, slack_client: slack_client, channel_id: channel_id,
                                       text_for_header: 'Poranny standup!', pic: pic, responds: responds, username: name)[:ts]
 
-
     create_new_object_in_database = StandupCheck.create!(
       team: team_id,
       user_id: user_id,

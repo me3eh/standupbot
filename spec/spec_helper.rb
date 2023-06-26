@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 #---------------------------------------
-#require needed_libraries
+# require needed_libraries
 require 'rspec'
 require 'pry'
 require 'factory_bot'
@@ -22,12 +23,12 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
   #---------------------------------------
-  #FACTORY BOT SETUP
+  # FACTORY BOT SETUP
   config.include FactoryBot::Syntax::Methods
 
   # config.include Capybara::DSL
   #---------------------------------------
-  #DATABASE CLEANUP
+  # DATABASE CLEANUP
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation, except: %w[teams])
@@ -61,7 +62,6 @@ ActiveRecord::Base.establish_connection(
     ).result, [], [], true
   )['test']
 )
-
 
 require_relative '../importing_files'
 require_relative 'factories/standup_check_factory'

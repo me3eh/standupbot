@@ -27,7 +27,7 @@ module Jsons
               emoji: true
             },
             value: 'button_3',
-            action_id: 'actionId-3',
+            action_id: 'delete_ephemeral',
             style: 'danger'
           }
         ]
