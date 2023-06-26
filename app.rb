@@ -10,10 +10,14 @@ end
 require 'yaml'
 require 'erb'
 require 'date'
-require_relative 'lib2/load_env'
-require 'airrecord'
+require 'dotenv'
 
-$ENV = LoadENV.new
+Dotenv.load
+# require_relative 'lib2/load_env'
+# require 'dotenv'
+# require 'airrecord'
+
+# $ENV = LoadENV.new
 Dir['lib2/**/*.rb'].each { |file| require_relative "#{file}" }
 
 ActiveRecord::Base.establish_connection(
@@ -21,5 +25,5 @@ ActiveRecord::Base.establish_connection(
     ERB.new(
       File.read('config/postgresql.yml')
     ).result, aliases: true
-  )[$ENV.get('RACK_ENV')]
+  )[ENV['RACK_ENV']]
 )

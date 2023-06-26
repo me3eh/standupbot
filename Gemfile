@@ -21,6 +21,7 @@ gem 'slack-ruby-block-kit'
 gem 'slack-ruby-bot-server'
 gem 'slack-ruby-bot-server-events'
 gem 'standalone_migrations'
+gem 'dotenv'
 
 group :test do
   gem 'capybara'
