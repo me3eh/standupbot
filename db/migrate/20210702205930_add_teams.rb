@@ -1,6 +1,6 @@
 class AddTeams < ActiveRecord::Migration[6.0]
   def change
-    create_table :teams, force: true do |t|
+    create_table :teams do |t|
       t.string :team_id
       t.string :name
       t.string :domain

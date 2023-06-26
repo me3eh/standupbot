@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 require 'bundler'
 Bundler.require :default
 
@@ -11,23 +10,16 @@ end
 require 'yaml'
 require 'erb'
 require 'date'
-require 'pp'
-require_relative 'importing_files'
+require_relative 'lib2/load_env'
+require 'airrecord'
 
-ENV['RACK_ENV'] = 'test'
-
-# puts "dyyyyyy" + ENV['RACK_ENV']
-["slash_commands", "actions", "events", "modules", "block_actions"].map do |u|
-  Dir[ "lib/#{u}/*.rb"].each {|file| require_relative "#{file}" }
-end
-
+$ENV = LoadENV.new
+Dir['lib2/**/*.rb'].each { |file| require_relative "#{file}" }
 
 ActiveRecord::Base.establish_connection(
   YAML.safe_load(
     ERB.new(
       File.read('config/postgresql.yml')
-    ).result, [], [], true
-  )[ENV['RACK_ENV']]
+    ).result, aliases: true
+  )[$ENV.get('RACK_ENV')]
 )
-
-$everything_needed = EverythingNeeded.new
