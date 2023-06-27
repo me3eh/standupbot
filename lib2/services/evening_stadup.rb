@@ -13,7 +13,9 @@ module Services
                 prs].freeze
 
     def call(slack_client:, channel_id:, text_for_header:, responds:, pic:, username:, ts: nil)
-      blocks = [Jsons::Header.call(text: text_for_header)]
+      blocks = []
+      blocks << Jsons::Header.call(text: "#{text_for_header} #{username}")
+      blocks << Jsons::Image.call(pic: pic, username: username)
       color = '#1B4D3E'
       attachments = Jsons::Attachments.call(fields: fields(responds), color: color, pic: pic)
 
@@ -21,7 +23,7 @@ module Services
         channel: channel_id,
         blocks: blocks,
         attachments: attachments,
-        icon_url: pic,
+        # icon_url: pic,
         username: username
       )
     end

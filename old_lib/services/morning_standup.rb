@@ -58,6 +58,6 @@ module MorningStandup
   end
 
   def open_for_pp(checkbox_checked)
-    checkbox_checked ? '#chce sam :flushed:' : '#daj mnie kogoś'
+    checkbox_checked ? '#daj mnie kogoś' : '#chce sam :flushed:'
   end
 end
