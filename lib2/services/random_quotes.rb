@@ -14,7 +14,7 @@ module Services
        "Pie***lę standup, dawaj mi PP",
        "PP? Pie***lę, tak chłop ze chłopem?",
        "To zdawałem raport ja, Jarząbek",
-       "Czy naładowane bateryjki przed pracą? No tak średnio bym powiedział. Czyli za krótko było wolne? "|
+       "Czy naładowane bateryjki przed pracą? No tak średnio bym powiedział. Czyli za krótko było wolne? " +
          "Może za długo właśnie",
 
        # "Co tak pachnie? Standup. A czego dodałeś? "
