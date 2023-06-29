@@ -17,7 +17,7 @@ SlackRubyBotServer::Events.configure do |config|
         text: 'A co to za edytowanie nieswojego standupu?!. Nieladnie. Sobie jeszcze ziazie zrobisz, i co będzie?',
       )
     else
-      standup.delete!
+      standup.destroy!
 
       slack_client.chat_delete(
         channel: channel_id,
