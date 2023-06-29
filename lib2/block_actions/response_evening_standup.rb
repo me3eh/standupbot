@@ -12,8 +12,8 @@ SlackRubyBotServer::Events.configure do |config|
     ts = params.dig(:payload, :container, :message_ts)
 
     evening_standup = Services::EveningStandup.new
-    ts_message = evening_standup.call(ts: ts, slack_client: slack_client, channel_id: channel_id,
-                                      text_for_header: 'Evening Standup!', pic: pic, responds: responds, username: name)[:ts]
+    ts_message = evening_standup.call(slack_client: slack_client, channel_id: channel_id, responds: responds,
+                                      text_for_header: 'Evening Standup!', pic: pic, username: name)[:ts]
 
     create_new_object_in_database = StandupCheck.create!(
       team: team_id,
@@ -25,6 +25,7 @@ SlackRubyBotServer::Events.configure do |config|
       evening_first: responds[:first_input],
       evening_second: responds[:second_input],
       evening_third: responds[:third_input],
+      evening_fourth: responds[:fourth_input],
       prs_and_estimation: responds[:prs]
     )
 

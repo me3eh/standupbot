@@ -19,7 +19,15 @@ SlackRubyBotServer::Events.configure do |config|
         username: username
       )
     else
-      json_blocks = if params.dig(:payload, :message, :attachments).first.dig(:fields).size == 8
+      standup_buffer = StandupBuffer.find_by(user_id: user_id, team_id: team_id)
+      if standup_buffer.nil?
+        StandupBuffer.create(user_id: user_id, team_id: team_id, message_timestamp: ts_message)
+      else
+        standup_buffer.update!(message_timestamp: ts_message)
+      end
+
+
+      json_blocks = if params.dig(:payload, :message, :attachments).first.dig(:fields).size >= 8
                       Jsons::FilledMorningForm.new.call(user_id: user_id, team_id: team_id, standup: standup)
                     else
                       Jsons::FilledEveningForm.new.call(user_id: user_id, team_id: team_id, standup: standup)
@@ -33,25 +41,7 @@ SlackRubyBotServer::Events.configure do |config|
         username: username
       )
     end
-    # standup = StandupCheck.find_by(ts_of_message_evening: ts_message, user_id: user, team: team) if standup.nil?
 
-    # Faraday.post(action[:payload][:response_url], {
-    #   response_type: 'ephemeral',
-    #   "blocks":[
-    #     {
-    #       "type": "section",
-    #       "text": {
-    #         "type": "mrkdwn",
-    #         "text": ":serin: Rozwiń załącznik  :nires:"
-    #       }
-    #     },
-    #     {
-    #       "type": "image",
-    #       "image_url": "https://cdn.discordapp.com/attachments/766045866724163647/862998404031578112/ezgif.com-gif-maker4.gif",
-    #       "alt_text": "inspiration"
-    #     }
-    #   ],
-    # }.to_json, 'Content-Type' => 'application/json')
     { ok: true }
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_06_14_132800) do
+ActiveRecord::Schema.define(version: 2023_06_29_020300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(version: 2023_06_14_132800) do
     t.date "date_of_beginning"
     t.date "date_of_ending"
     t.string "reason"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "standup_buffers", force: :cascade do |t|
+    t.string "team_id"
+    t.string "user_id"
+    t.string "message_timestamp"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

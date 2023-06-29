@@ -6,6 +6,7 @@ module Jsons
       blocks = []
 
       blocks << Header.call(text: 'Poranny Standup!')
+      blocks << EditStandupImage.call(ts_message: standup.ts_of_message_morning)
       blocks << FilledInput.call(label_text: '1. Jakie zadania na dziś planujesz oraz jak oceniasz czas ich wykonania?',
                            value_id: 'first_input', text: standup.morning_first)
       blocks << FilledInput.call(label_text: '2. Jakie widzisz zagrożenia i blokery w powyższej liście?',
@@ -23,7 +24,7 @@ module Jsons
       blocks << FilledInput.call(label_text: '8. Jakie gemy wykorzystałeś?', value_id: 'eighth_input', text: standup.morning_eighth)
       blocks << RadioButton.call(value_id: 'radio_input')
       blocks << CheckBox.call(value_id: 'checkbox_input')
-      blocks << ActionBlock.call(action_button1: 'morning_saving')
+      blocks << ActionBlock.call(action_button1: 'morning_editing')
       blocks
     end
   end

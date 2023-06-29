@@ -5,6 +5,7 @@ module Jsons
     def call(user_id:, team_id:, standup:)
       blocks = []
       blocks << Header.call(text: 'Wieczorny Standup!')
+      blocks << EditStandupImage.call(ts_message: standup.ts_of_message_evening)
       blocks << FilledInput.call(label_text: '1. Co udało ci sie dzisiaj skończyć?', value_id: 'first_input', text: standup.evening_first)
       blocks << FilledInput.call(label_text: '2. Które zadań nie zostały zakończone i na jakim etapie dzisiaj je pozostawiasz ? ' +
           '(pamiętałeś żeby wypchnąć je do repo?)', value_id: 'second_input', text: standup.evening_second)
@@ -14,7 +15,7 @@ module Jsons
       blocks << FilledInput.call(
         label_text: 'Tutaj wrzuć swoje tickety/pry oraz czas ich wykonania - spokojnie, opcjonalne', value_id: 'prs',text: standup.prs_and_estimation
       )
-      blocks << ActionBlock.call(action_button1: 'evening_saving')
+      blocks << ActionBlock.call(action_button1: 'evening_editing')
       blocks
     end
   end

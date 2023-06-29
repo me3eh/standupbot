@@ -19,13 +19,24 @@ module Services
       color = '#1B4D3E'
       attachments = Jsons::Attachments.call(fields: fields(responds), color: color, pic: pic)
 
-      slack_client.chat_postMessage(
-        channel: channel_id,
-        blocks: blocks,
-        attachments: attachments,
-        # icon_url: pic,
-        username: username
-      )
+      if ts.nil?
+        slack_client.chat_postMessage(
+          channel: channel_id,
+          blocks: blocks,
+          attachments: attachments,
+          icon_url: pic,
+          username: username
+        )
+      else
+        slack_client.chat_update(
+          ts: ts,
+          channel: channel_id,
+          blocks: blocks,
+          attachments: attachments,
+          icon_url: pic,
+          username: username
+        )
+      end
     end
 
     private
