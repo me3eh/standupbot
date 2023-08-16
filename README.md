@@ -1,4 +1,7 @@
 <h1 style="justify-content: center; display:grid; color:purple;">Wstaniobot</h1>
+
+# Instrukcja użytkownika
+
 ## Komendy:
 - ### morning_standup 
 - ### evening_standup 
@@ -111,5 +114,42 @@ RACK_ENV='test' foreman start
 ```
 after completing tests, all tables will be wiped except teams, which tests simply needs 
 
+# Instrukcja administracyjna
+#### Tworzenie serwera testowego
+Na start tworzymy serwer startowy (gdzie będziemy testować bota)
+
+#### Tworzenie bota na app.slack.com
+Na start tworzymy własnego bota na https://app.slack.com/
+#### Kopiowanie envów
+Robimy `cp .env.example .env` i wklejamy tokeny bota do .enva
+
+#### Przygotowanie aplikacji do działania lokalnie
+
+Warto w tym momencie 
+`Bundle i`
+Oczywiście `rake db:create db:migrate`
+
+Pobierz ngrok.
+
+Na dzień dzisiejszy uruchamia się go poprzez komendę `ngrok http 5000` (5000 to port foremana).
+To głównie dlatego, że slack api potrzebuje https i po to jest ngrok.
+Można użyć innego serwisu do tunelowania - pagekite też dawał radę.
+
+Jednocześnie należy uruchomić serwer - `foreman start` 
+
+I już mamy działający serwer i ngroka.
+
+#### Weryfikacja endpointów bota
+Gdy to wszystko mamy, kopiujemy tam app_manifesto.txt z zamienionymi wszystkie urle z tym wygenerowanym przez ngrok.
+Klikamy zapisz.
+
+Prawdopodobnie wyskoczy powiadomienie odnośnie event subscription. Klikamy click here to verify i powinno bez problemu przejść(oczyœiście cały podpunkt "Weryfikacja endpointów bota" robimy z działającym ngrokiem i serwerem).
+
+![img.png](slack_api_app_manifest.png)
+#### Dodawanie bota lokalnie do serwera
+Gdy to się potwierdzi, można dodać bota do sewera.
+
+Wchodzimy w link wygenerowany przez ngroka (ewentualnie localhost:5000) i dodajemy bota do serwera (wszystko według kroków podanych na stronie z linku).
 
 
+### Voila, powinno śmigać

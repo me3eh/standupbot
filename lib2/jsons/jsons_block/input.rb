@@ -9,6 +9,7 @@ module Jsons
         element: {
           type: 'plain_text_input',
           multiline: true,
+          max_length: 1990,
           action_id: value_id
         },
         label: {

@@ -1,0 +1,78 @@
+display_information:
+  name: kekw
+features:
+  bot_user:
+    display_name: kekw
+    always_online: false
+  shortcuts:
+    - name: Regular command
+      type: message
+      callback_id: serin
+      description: Check it :P
+    - name: Edit standup
+      type: message
+      callback_id: edit_standup
+      description: Edit your standup
+    - name: Delete standup
+      type: message
+      callback_id: delete_standup
+      description: Delete standup...duuuhh
+  slash_commands:
+    - command: /who_doesnt_standup1
+      url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/command
+      description: sa
+      should_escape: false
+    - command: /morning_standup1
+      url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/command
+      description: IIiha
+      should_escape: false
+    - command: /help1
+      url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/command
+      description: sd
+      should_escape: false
+    - command: /evening_standup1
+      url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/command
+      description: dsda
+      should_escape: false
+    - command: /excusal1
+      url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/command
+      description: Dostań zwolnienie ze standupu
+      should_escape: false
+oauth_config:
+  redirect_urls:
+    - https://f69e-89-161-57-196.ngrok-free.app
+  scopes:
+    user:
+      - identity.basic
+      - channels:history
+      - groups:history
+      - im:history
+      - mpim:history
+    bot:
+      - channels:read
+      - chat:write
+      - chat:write.customize
+      - commands
+      - groups:read
+      - incoming-webhook
+      - mpim:read
+      - users:read
+      - channels:history
+      - groups:history
+      - im:history
+      - mpim:history
+      - metadata.message:read
+settings:
+  event_subscriptions:
+    request_url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/event
+    bot_events:
+      - member_joined_channel
+      - member_left_channel
+      - message.channels
+      - user_change
+  interactivity:
+    is_enabled: true
+    request_url: https://f69e-89-161-57-196.ngrok-free.app/api/slack/action
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: true
